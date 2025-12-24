@@ -1,0 +1,169 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>前端 | HTML标签详解 | 前端笔记（二） | Mtedium</title><meta name="author" content="Mtedium"><meta name="copyright" content="Mtedium"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前端学习笔记（二）| HTML常用标签一、前言这里简单讲讲每个标签有什么用吧，还没开始写，欸嘿(^_^) 我尽量用自己的语言来讲，毕竟是费曼学习法，如果只是背书的话就没有写出来的意义了。我写这种技术博客经验不多，所以结构和内容不一定能很清晰，请见谅。但是随着我写作能力的上升，我会慢慢调整的。(ง •_•)ง 二、HTML的一些基础知识HTML，全称：HyperText Markup Languag">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端 | HTML标签详解 | 前端笔记（二）">
+<meta property="og:url" content="http://mtedium.cn/posts/20251114/%E5%89%8D%E7%AB%AF-html%E6%A0%87%E7%AD%BE%E8%AF%A6%E8%A7%A3-%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89/index.html">
+<meta property="og:site_name" content="Mtedium">
+<meta property="og:description" content="前端学习笔记（二）| HTML常用标签一、前言这里简单讲讲每个标签有什么用吧，还没开始写，欸嘿(^_^) 我尽量用自己的语言来讲，毕竟是费曼学习法，如果只是背书的话就没有写出来的意义了。我写这种技术博客经验不多，所以结构和内容不一定能很清晰，请见谅。但是随着我写作能力的上升，我会慢慢调整的。(ง •_•)ง 二、HTML的一些基础知识HTML，全称：HyperText Markup Languag">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251116%2Fefa316680d578d38ad631b4c07ff9e8a.jpg">
+<meta property="article:published_time" content="2025-11-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-12-24T13:26:18.904Z">
+<meta property="article:author" content="Mtedium">
+<meta property="article:tag" content="HTML">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251116%2Fefa316680d578d38ad631b4c07ff9e8a.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "前端 | HTML标签详解 | 前端笔记（二）",
+  "url": "http://mtedium.cn/posts/20251114/%E5%89%8D%E7%AB%AF-html%E6%A0%87%E7%AD%BE%E8%AF%A6%E8%A7%A3-%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89/",
+  "image": "https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251116%2Fefa316680d578d38ad631b4c07ff9e8a.jpg",
+  "datePublished": "2025-11-14T16:00:00.000Z",
+  "dateModified": "2025-12-24T13:26:18.904Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Mtedium",
+      "url": "https://mtedium.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://mtedium.cn/posts/20251114/%E5%89%8D%E7%AB%AF-html%E6%A0%87%E7%AD%BE%E8%AF%A6%E8%A7%A3-%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="msvalidate.01" content="059DF54900C08E19451C31287E2DF17F"/><link rel="stylesheet" href="/css/index.css?v=5.5.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '前端 | HTML标签详解 | 前端笔记（二）',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251022%2Fce1d2f89ee9b73aff3af86f6ee5fee33.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251116%2Fefa316680d578d38ad631b4c07ff9e8a.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mtedium</span></a><a class="nav-page-title" href="/"><span class="site-name">前端 | HTML标签详解 | 前端笔记（二）</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">前端 | HTML标签详解 | 前端笔记（二）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-14T16:00:00.000Z" title="发表于 2025-11-15 00:00:00">2025-11-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-24T13:26:18.904Z" title="更新于 2025-12-24 21:26:18">2025-12-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="前端学习笔记（二）-HTML常用标签"><a href="#前端学习笔记（二）-HTML常用标签" class="headerlink" title="前端学习笔记（二）| HTML常用标签"></a>前端学习笔记（二）| HTML常用标签</h1><h2 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h2><p>这里简单讲讲每个标签有什么用吧，还没开始写，欸嘿(<em>^_^</em>)</p>
+<p>我尽量用自己的语言来讲，毕竟是费曼学习法，如果只是背书的话就没有写出来的意义了。我写这种技术博客经验不多，所以结构和内容不一定能很清晰，请见谅。但是随着我写作能力的上升，我会慢慢调整的。(ง •_•)ง</p>
+<h2 id="二、HTML的一些基础知识"><a href="#二、HTML的一些基础知识" class="headerlink" title="二、HTML的一些基础知识"></a>二、HTML的一些基础知识</h2><p>HTML，全称：HyperText Markup Language ，中文：文本标记语言</p>
+<h2 id="三、HTML常用标签详解"><a href="#三、HTML常用标签详解" class="headerlink" title="三、HTML常用标签详解"></a>三、HTML常用标签详解</h2><p>1.<code>&lt;h1&gt;~&lt;h6&gt;&lt;/h1&gt;~&lt;/h6&gt;</code>一级标题到六级标题标签</p>
+<h1>h1</h1><h2>h2</h2><h3>h3</h3><h4>h4</h4><h5>h5</h5><h6>h6</h6>
+
+<p>2.<code>&lt;p&gt;&lt;/p&gt;</code>段落标签</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://mtedium.github.io">Mtedium</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://mtedium.cn/posts/20251114/%E5%89%8D%E7%AB%AF-html%E6%A0%87%E7%AD%BE%E8%AF%A6%E8%A7%A3-%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89/">http://mtedium.cn/posts/20251114/%E5%89%8D%E7%AB%AF-html%E6%A0%87%E7%AD%BE%E8%AF%A6%E8%A7%A3-%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://mtedium.cn" target="_blank">Mtedium</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/HTML/">HTML</a></div><div class="post-share"><div class="social-share" data-image="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251116%2Fefa316680d578d38ad631b4c07ff9e8a.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/20251124/%E5%89%8D%E7%AB%AF%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%8E%E6%84%9F%E6%82%9F/" title="前端学习记录与感悟"><img class="cover" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251125%2Fd92635067baaad2c067e6a80e247ce0b.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">前端学习记录与感悟</div></div><div class="info-2"><div class="info-item-1">前端的学习记录和一些碎碎念很多学习时的源文件在我github repo里面mtedium&#x2F;front_end_start 前面的记录暂时不想写，懒，慢慢补吧 2025.11.25今天学了JS的数组和方法，函数，对象，math对象和方法以及data对象和方法。 JS数组，对象，和C&#x2F;C++，Python都大差不差，所以说有了别的语言基础来学一门新的编程语言，真的是触类旁通。和别的语言相似的部分我不想要花很长时间，用不到的占多数，用到的时候去查就行，常用的会随着不断使用自然记住。学js是为了做出东西来，不是为了背下来。工科学生就要不断实践，看书看资料这类理论的东西，永远不会等到你书翻烂了，再开始实践的，要在实践的过程中慢慢的把书翻烂。把重心放在后面关于dom的部分最重要！！！ 目前在学ES5的部分等学完了会去跟进ES6的 2025.11.26js es5的到一段落了，开始纠结到底是做项目还是继续学dom和es6。我知道知道自己为什么纠结，因为长期的没有对外的产出使得有点动力不足。只能感叹很多时候就是没有正反馈的，还是动起来吧，选择哪个都可以，反正基本功还不扎实，有...</div></div></div></a><a class="pagination-related" href="/posts/20251102/%E5%89%8D%E7%AB%AF-html%E6%A0%87%E7%AD%BE%E5%AD%97%E5%85%B8-%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/" title="前端 | HTML标签字典 | 前端笔记（一）"><img class="cover" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251103%2F5ed6355c29f225be313cc5feab941752.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">前端 | HTML标签字典 | 前端笔记（一）</div></div><div class="info-2"><div class="info-item-1">前端学习笔记（一）| HTML常用标签一、前言算是费曼学习法吧，我想稍微写点教程啥的，会慢慢修改的，所以一开始我只保证更新，不保证质量，毕竟开始才是最重要的💪当然这里只是小字典，后面我尽量写个关于每个标签的介绍吧 二、HTML常用标签小字典123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566###没想好咋分类&lt;div&gt;块元素容器标签&lt;span&gt;行内元素容器标签&lt;h1&gt;~&lt;h6&gt;标题标签&lt;p&gt;段落?文本?标签&lt;b&gt;, &lt;strong&gt;, &lt;em&gt;加粗标签&lt;i&gt;斜体标签&lt;del&gt;删除线标签&lt;br&gt;换行标签&lt;hr&gt;水平分割线标签&lt;ol&gt;有序列表标签&lt;ul&gt;无序列表标签&lt;li&gt;列表元素/项标签&lt;table&gt;...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/20251102/%E5%89%8D%E7%AB%AF-html%E6%A0%87%E7%AD%BE%E5%AD%97%E5%85%B8-%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/" title="前端 | HTML标签字典 | 前端笔记（一）"><img class="cover" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251103%2F5ed6355c29f225be313cc5feab941752.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-03</div><div class="info-item-2">前端 | HTML标签字典 | 前端笔记（一）</div></div><div class="info-2"><div class="info-item-1">前端学习笔记（一）| HTML常用标签一、前言算是费曼学习法吧，我想稍微写点教程啥的，会慢慢修改的，所以一开始我只保证更新，不保证质量，毕竟开始才是最重要的💪当然这里只是小字典，后面我尽量写个关于每个标签的介绍吧 二、HTML常用标签小字典123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566###没想好咋分类&lt;div&gt;块元素容器标签&lt;span&gt;行内元素容器标签&lt;h1&gt;~&lt;h6&gt;标题标签&lt;p&gt;段落?文本?标签&lt;b&gt;, &lt;strong&gt;, &lt;em&gt;加粗标签&lt;i&gt;斜体标签&lt;del&gt;删除线标签&lt;br&gt;换行标签&lt;hr&gt;水平分割线标签&lt;ol&gt;有序列表标签&lt;ul&gt;无序列表标签&lt;li&gt;列表元素/项标签&lt;table&gt;...</div></div></div></a><a class="pagination-related" href="/posts/20251124/%E5%89%8D%E7%AB%AF%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%8E%E6%84%9F%E6%82%9F/" title="前端学习记录与感悟"><img class="cover" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251125%2Fd92635067baaad2c067e6a80e247ce0b.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-25</div><div class="info-item-2">前端学习记录与感悟</div></div><div class="info-2"><div class="info-item-1">前端的学习记录和一些碎碎念很多学习时的源文件在我github repo里面mtedium&#x2F;front_end_start 前面的记录暂时不想写，懒，慢慢补吧 2025.11.25今天学了JS的数组和方法，函数，对象，math对象和方法以及data对象和方法。 JS数组，对象，和C&#x2F;C++，Python都大差不差，所以说有了别的语言基础来学一门新的编程语言，真的是触类旁通。和别的语言相似的部分我不想要花很长时间，用不到的占多数，用到的时候去查就行，常用的会随着不断使用自然记住。学js是为了做出东西来，不是为了背下来。工科学生就要不断实践，看书看资料这类理论的东西，永远不会等到你书翻烂了，再开始实践的，要在实践的过程中慢慢的把书翻烂。把重心放在后面关于dom的部分最重要！！！ 目前在学ES5的部分等学完了会去跟进ES6的 2025.11.26js es5的到一段落了，开始纠结到底是做项目还是继续学dom和es6。我知道知道自己为什么纠结，因为长期的没有对外的产出使得有点动力不足。只能感叹很多时候就是没有正反馈的，还是动起来吧，选择哪个都可以，反正基本功还不扎实，有...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251022%2Fce1d2f89ee9b73aff3af86f6ee5fee33.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Mtedium</div><div class="author-info-description">这是我的博客网站</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/mtedium"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/mtedium" rel="external nofollow noreferrer" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://www.zhihu.com/people/mtedium" rel="external nofollow noreferrer" target="_blank" title="Zhihu"><i class="fab fa-zhihu" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89-HTML%E5%B8%B8%E7%94%A8%E6%A0%87%E7%AD%BE"><span class="toc-number">1.</span> <span class="toc-text">前端学习笔记（二）| HTML常用标签</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%89%8D%E8%A8%80"><span class="toc-number">1.1.</span> <span class="toc-text">一、前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81HTML%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">1.2.</span> <span class="toc-text">二、HTML的一些基础知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81HTML%E5%B8%B8%E7%94%A8%E6%A0%87%E7%AD%BE%E8%AF%A6%E8%A7%A3"><span class="toc-number">1.3.</span> <span class="toc-text">三、HTML常用标签详解</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">h1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">h2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.1.</span> <span class="toc-text">h3</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.1.1.1.</span> <span class="toc-text">h4</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">2.1.1.1.1.</span> <span class="toc-text">h5</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link"><span class="toc-number">2.1.1.1.1.1.</span> <span class="toc-text">h6</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/20251216/js-%E8%A7%A6%E5%8F%91%E7%9A%84%E8%A1%A8%E5%8D%95%E6%8F%90%E4%BA%A4%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E7%9B%91%E5%90%AC%E4%B8%8D%E5%88%B0-onsubmit%EF%BC%9F/" title="JS 触发的表单提交，为什么监听不到 onsubmit？"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251224/c4af37b481e1929e9a120f8466d83fbd.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JS 触发的表单提交，为什么监听不到 onsubmit？"/></a><div class="content"><a class="title" href="/posts/20251216/js-%E8%A7%A6%E5%8F%91%E7%9A%84%E8%A1%A8%E5%8D%95%E6%8F%90%E4%BA%A4%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E7%9B%91%E5%90%AC%E4%B8%8D%E5%88%B0-onsubmit%EF%BC%9F/" title="JS 触发的表单提交，为什么监听不到 onsubmit？">JS 触发的表单提交，为什么监听不到 onsubmit？</a><time datetime="2025-12-16T16:00:00.000Z" title="发表于 2025-12-17 00:00:00">2025-12-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/20251124/%E5%89%8D%E7%AB%AF%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%8E%E6%84%9F%E6%82%9F/" title="前端学习记录与感悟"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251125%2Fd92635067baaad2c067e6a80e247ce0b.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前端学习记录与感悟"/></a><div class="content"><a class="title" href="/posts/20251124/%E5%89%8D%E7%AB%AF%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%8E%E6%84%9F%E6%82%9F/" title="前端学习记录与感悟">前端学习记录与感悟</a><time datetime="2025-11-24T16:00:00.000Z" title="发表于 2025-11-25 00:00:00">2025-11-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/20251114/%E5%89%8D%E7%AB%AF-html%E6%A0%87%E7%AD%BE%E8%AF%A6%E8%A7%A3-%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89/" title="前端 | HTML标签详解 | 前端笔记（二）"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251116%2Fefa316680d578d38ad631b4c07ff9e8a.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前端 | HTML标签详解 | 前端笔记（二）"/></a><div class="content"><a class="title" href="/posts/20251114/%E5%89%8D%E7%AB%AF-html%E6%A0%87%E7%AD%BE%E8%AF%A6%E8%A7%A3-%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89/" title="前端 | HTML标签详解 | 前端笔记（二）">前端 | HTML标签详解 | 前端笔记（二）</a><time datetime="2025-11-14T16:00:00.000Z" title="发表于 2025-11-15 00:00:00">2025-11-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/20251102/%E5%89%8D%E7%AB%AF-html%E6%A0%87%E7%AD%BE%E5%AD%97%E5%85%B8-%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/" title="前端 | HTML标签字典 | 前端笔记（一）"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251103%2F5ed6355c29f225be313cc5feab941752.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前端 | HTML标签字典 | 前端笔记（一）"/></a><div class="content"><a class="title" href="/posts/20251102/%E5%89%8D%E7%AB%AF-html%E6%A0%87%E7%AD%BE%E5%AD%97%E5%85%B8-%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/" title="前端 | HTML标签字典 | 前端笔记（一）">前端 | HTML标签字典 | 前端笔记（一）</a><time datetime="2025-11-02T16:00:00.000Z" title="发表于 2025-11-03 00:00:00">2025-11-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/20251019/%E5%8D%9A%E5%AE%A2%E8%B0%83%E8%AF%95%E6%97%A5%E5%BF%97/" title="博客调试日志"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251023%2Fa42a21b959362d0b8804712fc6d0c795.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="博客调试日志"/></a><div class="content"><a class="title" href="/posts/20251019/%E5%8D%9A%E5%AE%A2%E8%B0%83%E8%AF%95%E6%97%A5%E5%BF%97/" title="博客调试日志">博客调试日志</a><time datetime="2025-10-19T16:00:00.000Z" title="发表于 2025-10-20 00:00:00">2025-10-20</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Mtedium</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo 8.0.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.1</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.1"></script><script src="/js/main.js?v=5.5.1"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
