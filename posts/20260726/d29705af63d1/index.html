@@ -1,0 +1,266 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>明明已经删掉的代码，为什么 merge 后还在？ | Mtedium</title><meta name="author" content="Mtedium"><meta name="copyright" content="Mtedium"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="这次排查原本只是清理一个没有调用方的兼容别名，却把我带到了一个一直没有想清楚的问题上：  公共分支早就删掉这段代码了，为什么我把公共分支合进来，它还留在自己的分支里？Git 不应该记得那次删除吗？  直觉上，我把合并理解成“把对方最近做过的操作再执行一遍”。但对这次问题，真正有解释力的是三个位置的文件快照：共同祖先、当前分支和对方分支。 起点：一个不再需要的别名原始问题中，有一段为了旧命名保留的导">
+<meta property="og:type" content="article">
+<meta property="og:title" content="明明已经删掉的代码，为什么 merge 后还在？">
+<meta property="og:url" content="http://mtedium.cn/posts/20260726/d29705af63d1/index.html">
+<meta property="og:site_name" content="Mtedium">
+<meta property="og:description" content="这次排查原本只是清理一个没有调用方的兼容别名，却把我带到了一个一直没有想清楚的问题上：  公共分支早就删掉这段代码了，为什么我把公共分支合进来，它还留在自己的分支里？Git 不应该记得那次删除吗？  直觉上，我把合并理解成“把对方最近做过的操作再执行一遍”。但对这次问题，真正有解释力的是三个位置的文件快照：共同祖先、当前分支和对方分支。 起点：一个不再需要的别名原始问题中，有一段为了旧命名保留的导">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/0f0cd53cd16e8351e725d0dacef33983-20261015131650731.png">
+<meta property="article:published_time" content="2026-07-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-15T05:48:25.930Z">
+<meta property="article:author" content="Mtedium">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="工程化">
+<meta property="article:tag" content="版本控制">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/0f0cd53cd16e8351e725d0dacef33983-20261015131650731.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "明明已经删掉的代码，为什么 merge 后还在？",
+  "url": "http://mtedium.cn/posts/20260726/d29705af63d1/",
+  "image": "https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/0f0cd53cd16e8351e725d0dacef33983-20261015131650731.png",
+  "datePublished": "2026-07-26T16:00:00.000Z",
+  "dateModified": "2026-10-15T05:48:25.930Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Mtedium",
+      "url": "https://mtedium.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://mtedium.cn/posts/20260726/d29705af63d1/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="msvalidate.01" content="059DF54900C08E19451C31287E2DF17F"/><link rel="stylesheet" href="/css/index.css?v=5.5.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '明明已经删掉的代码，为什么 merge 后还在？',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251022%2Fce1d2f89ee9b73aff3af86f6ee5fee33.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">28</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">47</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/0f0cd53cd16e8351e725d0dacef33983-20261015131650731.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mtedium</span></a><a class="nav-page-title" href="/"><span class="site-name">明明已经删掉的代码，为什么 merge 后还在？</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">明明已经删掉的代码，为什么 merge 后还在？</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-07-26T16:00:00.000Z" title="发表于 2026-07-27 00:00:00">2026-07-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-15T05:48:25.930Z" title="更新于 2026-10-15 13:48:25">2026-10-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/">问题记录</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>这次排查原本只是清理一个没有调用方的兼容别名，却把我带到了一个一直没有想清楚的问题上：</p>
+<blockquote>
+<p>公共分支早就删掉这段代码了，为什么我把公共分支合进来，它还留在自己的分支里？Git 不应该记得那次删除吗？</p>
+</blockquote>
+<p>直觉上，我把合并理解成“把对方最近做过的操作再执行一遍”。但对这次问题，真正有解释力的是三个位置的文件快照：共同祖先、当前分支和对方分支。</p>
+<h2 id="起点：一个不再需要的别名"><a href="#起点：一个不再需要的别名" class="headerlink" title="起点：一个不再需要的别名"></a>起点：一个不再需要的别名</h2><p>原始问题中，有一段为了旧命名保留的导出，下面把名称简化：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 向后兼容别名</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> getWorkspaceId = getTenantId;</span><br></pre></td></tr></table></figure>
+
+<p>公共分支已经做过命名统一，并删除这个别名。我自己的分支上，它却仍然存在。</p>
+<p>第一轮排查，我用 <code>git blame</code> 找定义的来源，又用 <code>git log -S</code> 查相关文字的增减，以为抓住了问题。但这些命令解决的是特定角度的问题：某行最后由哪个提交形成，哪些提交改变了某段文字的出现次数。它们不能代替合并拓扑和实际文件内容。</p>
+<p>尤其是默认的路径历史展示、merge diff 形式，都可能省略排查时真正关心的那一面。看到几条提交，不等于已经把两条开发路径的状态对照完整。</p>
+<h2 id="真相藏在共同祖先里"><a href="#真相藏在共同祖先里" class="headerlink" title="真相藏在共同祖先里"></a>真相藏在共同祖先里</h2><p>沿着两条分支查下去，关键事实是：<strong>公共分支的那次删除，已经进入了双方的共同祖先；我的功能提交后来又把别名加回来了。</strong></p>
+<p>把具体提交 ID 去掉，只保留关系，可以表示成：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">base：已经没有别名</span><br><span class="line">├── 公共分支：仍然没有别名</span><br><span class="line">└── 我的分支：重新加入别名</span><br></pre></td></tr></table></figure>
+
+<p>对应的三方状态是：</p>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>别名是否存在</th>
+<th>相对 base 的变化</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>base</td>
+<td>不存在</td>
+<td>比较起点</td>
+</tr>
+<tr>
+<td>ours，我的分支</td>
+<td>存在</td>
+<td>新增</td>
+</tr>
+<tr>
+<td>theirs，公共分支</td>
+<td>不存在</td>
+<td>无变化</td>
+</tr>
+</tbody></table>
+<p>从我的视角看，它像“公共分支删了，我这里没删”。从这次合并的比较起点看，它却是“公共分支没有改，我这里新增”。对这样一个可独立合并的新增，Git 通常会保留它，也就没有理由报冲突。</p>
+<p>如果对方 tip 恰好就是 merge base，说明对方已经是当前分支的祖先，重复 merge 还可能直接返回 <code>Already up to date</code>。这种情况下，更不会再执行一遍旧的删除。</p>
+<h2 id="删除不会成为永久规则"><a href="#删除不会成为永久规则" class="headerlink" title="删除不会成为永久规则"></a>删除不会成为永久规则</h2><p>对常规三方合并，可以先按下面的方式判断某个独立区域：</p>
+<table>
+<thead>
+<tr>
+<th>base</th>
+<th>ours</th>
+<th>theirs</th>
+<th>通常的合并结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>A</td>
+<td>B</td>
+<td>B</td>
+</tr>
+<tr>
+<td>A</td>
+<td>B</td>
+<td>A</td>
+<td>B</td>
+</tr>
+<tr>
+<td>A</td>
+<td>B</td>
+<td>B</td>
+<td>B</td>
+</tr>
+<tr>
+<td>A</td>
+<td>B</td>
+<td>C</td>
+<td>同一区域不兼容时可能冲突</td>
+</tr>
+</tbody></table>
+<p>实际文件还可能涉及重命名、文件删除、上下文变化等情况，这张表只是理解三方比较的起点。</p>
+<p>Git 保存历史，却不会把历史上的“删掉别名”解释成“今后禁止重新引入这个符号”。如果两边的最终状态足以得到合并结果，它不会逐条重放中间的命令。这一点也写在 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://git-scm.com/docs/git-merge">git-merge 官方文档</a>中：三方合并主要考虑双方 tip 和 merge base，而不是逐个考虑中间提交。</p>
+<p>反过来说，如果 base 中有一个文件，一边删除，另一边修改，可能得到的是 modify&#x2F;delete 冲突。不能把“删除会被自动保留”或“删除一定会赢”概括成通用规则，先看 base 才有意义。</p>
+<h2 id="我会怎样重新排查"><a href="#我会怎样重新排查" class="headerlink" title="我会怎样重新排查"></a>我会怎样重新排查</h2><p>下面以本地存在的 <code>dev</code> 和 <code>feature</code> 分支为例。若检查的是远程分支，先 fetch，再把名称换成相应远程跟踪引用。</p>
+<p>先看关系，再定位共同祖先：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">log</span> --all --graph --oneline --decorate</span><br><span class="line">git merge-base dev feature</span><br></pre></td></tr></table></figure>
+
+<p>假设上一个命令返回的提交 ID 用 <code>BASE</code> 表示，再分别读同一路径：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git show BASE:src/utils/auth.ts</span><br><span class="line">git show feature:src/utils/auth.ts</span><br><span class="line">git show dev:src/utils/auth.ts</span><br></pre></td></tr></table></figure>
+
+<p>这里的 <code>BASE</code> 是需要替换的占位符。检查目标不是“哪个分支里有删除提交”这么单一，而是三个快照里到底有什么。</p>
+<p>然后再查符号变化和 merge 两侧。执行前，把 <code>MERGE_COMMIT</code> 替换为要检查的合并提交 ID：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">log</span> --all -p -S <span class="string">&#x27;getWorkspaceId&#x27;</span> -- src/utils/auth.ts</span><br><span class="line">git show -m MERGE_COMMIT -- src/utils/auth.ts</span><br><span class="line">git grep -n <span class="string">&#x27;getWorkspaceId&#x27;</span> feature -- src</span><br></pre></td></tr></table></figure>
+
+<p><code>-S</code> 适合追踪字符串出现次数的变化，但不是万能的语义搜索；<code>git show -m</code> 则把合并提交分别与各父提交比较。只看默认合并展示中没有某段 diff，不能证明它在所有比较方向上都没有变化。关于逐父提交的展示，见 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://git-scm.com/docs/git-show">git-show 文档</a>。</p>
+<h2 id="没有冲突，也要检查最终行为"><a href="#没有冲突，也要检查最终行为" class="headerlink" title="没有冲突，也要检查最终行为"></a>没有冲突，也要检查最终行为</h2><p>这次真正需要决定的，并不只有“留下别名还是删掉别名”。同一个工具文件里，返回值约定、登录状态清理等行为也可能各自来自不同功能。</p>
+<p>因此，处理时应该按意图逐项确认：别名是否仍有调用方；调用方需要空字符串还是 <code>null</code>；清理哪些状态是否与当前功能一致。不能为了“看起来与公共分支一致”而整文件覆盖，也不能因为 Git 没报错就认为业务含义一致。</p>
+<p>需要在提交前查看合并结果时，可以在工作区干净的前提下使用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git merge --no-ff --no-commit dev</span><br><span class="line">git status</span><br><span class="line">git diff --cached</span><br></pre></td></tr></table></figure>
+
+<p>确认后再提交，或者在仍处于合并过程时执行 <code>git merge --abort</code>。这里同时写 <code>--no-ff</code>，是因为只有 <code>--no-commit</code> 无法阻止快进更新；如果本来就已经合入，则不会凭空进入一次待完成的合并。具体行为见 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://git-scm.com/docs/git-merge#Documentation/git-merge.txt---no-commit">merge 的 no-commit 选项</a>。</p>
+<h2 id="分支策略可以缩小这种问题的发生范围"><a href="#分支策略可以缩小这种问题的发生范围" class="headerlink" title="分支策略可以缩小这种问题的发生范围"></a>分支策略可以缩小这种问题的发生范围</h2><p>和同事讨论后，我更愿意把任务放在短期 feature 分支上：从当前集成分支创建，开发期间按团队约定同步，完成后通过 MR 合入，再结束这条分支的生命周期。</p>
+<p>这样做可以减少长期个人分支反复吸收公共分支、又长期保留旧差异的情况。但它不会从机制上消灭语义冲突；rebase 同样需要验证，代码审查和有针对性的测试仍然要看合并后的行为。</p>
+<p>删除功能分支也要区分合入方式。普通 merge 通常能从主线追溯原提交，squash merge 保存的是新的合并结果，不能笼统地说“删掉名字以后，每个原提交永远都在主线上”。</p>
+<p>这次最有用的收获，是把问题从“Git 为什么不记得删除”改成了“这次合并相对哪个状态比较”。一旦把 base、ours、theirs 放在同一张表里，那段看似复活的代码，就有了明确来源。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://mtedium.github.io">Mtedium</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://mtedium.cn/posts/20260726/d29705af63d1/">http://mtedium.cn/posts/20260726/d29705af63d1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://mtedium.cn" target="_blank">Mtedium</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/git/">git</a><a class="post-meta__tags" href="/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/">版本控制</a><a class="post-meta__tags" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a></div><div class="post-share"><div class="social-share" data-image="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/0f0cd53cd16e8351e725d0dacef33983-20261015131650731.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/20260726/3a9e8e4d66ce/" title="Git 的分支只是指针：从 reset 理解提交图"><img class="cover" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/0a943c79b941477211baab2293da8198-20261015131607127.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Git 的分支只是指针：从 reset 理解提交图</div></div><div class="info-2"><div class="info-item-1">我对 Git 的理解，最早卡在一个看起来很简单的问题上：  有 a、b、c 三次提交，现在停在 c。执行 git reset HEAD^，撤销的是 b 还是 c？c 不是基于 b 做出来的吗？  如果只是背“撤销上一次提交”，碰到 revert、rebase 很快又会乱。真正让我把这些命令串起来的，是另一个发现：分支只是指向提交的引用，提交自己记录了父提交。 先把图上的线看明白下面的图按时间从左往右画，线表示父子关系： 1a──b──c  ← main  实际提交对象里的引用方向是从子提交指向父提交：c 记录 b，b 记录 a。main 指向最新提交 c，正常处于分支上时，HEAD 则指向 main。 所以 HEAD^ 表示当前提交的第一父提交，在这个例子里就是 b。它只是一个提交表达式；究竟会发生什么，要看哪个命令使用它。 reset 的参数是移动到哪里在当前分支上执行： 1git reset HEAD^  会把 main 从 c 移到 b： 123a──b──c   ↑  main  b 仍然在当前分支的历史里，c 不再能从 main 沿父提交找到。因此，描述为“让当前分支退...</div></div></div></a><a class="pagination-related" href="/posts/20260725/5462b20ebc8f/" title="SVG 到底该怎么复用？从 currentColor 到图标组件"><img class="cover" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/fb5b4dae42d5acc8efa4feb5933332dc-20261015131440041.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">SVG 到底该怎么复用？从 currentColor 到图标组件</div></div><div class="info-2"><div class="info-item-1">写项目时，我遇到了一个很小、但一直没想清楚的问题：同一个 SVG 要在多个地方使用，有时还要跟着按钮的文字变色，到底应该直接引用文件，还是抽成一个图标组件？ 我一开始以为，无论选哪条路，都得先把颜色改成 currentColor。后来才发现，这里其实混着两个问题：图形以什么方式进入页面，以及它的颜色由谁决定。 currentColor 解决的是颜色来源currentColor 表示当前元素的 color 值。对于单色 SVG，可以让填充或描边使用它，再通过 CSS 的 color 控制颜色： 123456&lt;button class=&quot;action&quot;&gt;  &lt;svg width=&quot;20&quot; height=&quot;20&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;    &lt;path d=&quot;M5 12h14M12 5v14&quot; fill=&quot;none&quot; stroke=&quot;currentCo...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/20260726/3a9e8e4d66ce/" title="Git 的分支只是指针：从 reset 理解提交图"><img class="cover" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/0a943c79b941477211baab2293da8198-20261015131607127.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-07-27</div><div class="info-item-2">Git 的分支只是指针：从 reset 理解提交图</div></div><div class="info-2"><div class="info-item-1">我对 Git 的理解，最早卡在一个看起来很简单的问题上：  有 a、b、c 三次提交，现在停在 c。执行 git reset HEAD^，撤销的是 b 还是 c？c 不是基于 b 做出来的吗？  如果只是背“撤销上一次提交”，碰到 revert、rebase 很快又会乱。真正让我把这些命令串起来的，是另一个发现：分支只是指向提交的引用，提交自己记录了父提交。 先把图上的线看明白下面的图按时间从左往右画，线表示父子关系： 1a──b──c  ← main  实际提交对象里的引用方向是从子提交指向父提交：c 记录 b，b 记录 a。main 指向最新提交 c，正常处于分支上时，HEAD 则指向 main。 所以 HEAD^ 表示当前提交的第一父提交，在这个例子里就是 b。它只是一个提交表达式；究竟会发生什么，要看哪个命令使用它。 reset 的参数是移动到哪里在当前分支上执行： 1git reset HEAD^  会把 main 从 c 移到 b： 123a──b──c   ↑  main  b 仍然在当前分支的历史里，c 不再能从 main 沿父提交找到。因此，描述为“让当前分支退...</div></div></div></a><a class="pagination-related" href="/posts/20260812/7d580423208f/" title="Gitea 推送遇到 HTTP 413：先查请求链路，再分清 SSH 端口"><img class="cover" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/6c2f26207f5c76ce9239dedf4d1016ec-20261015131937471.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-13</div><div class="info-item-2">Gitea 推送遇到 HTTP 413：先查请求链路，再分清 SSH 端口</div></div><div class="info-2"><div class="info-item-1">向自己的 Gitea 推送代码时，日志出现了： 123error: RPC failed; HTTP 413 curl 22fatal: the remote end hung up unexpectedlyEverything up-to-date  最后一句很容易让人误以为已经推上去了。但前面明确发生了失败，不能只挑一句好看的输出判断结果。 我的访问路径里还有 Cloudflare，服务器没有公网 IP，但可以通过虚拟局域网连接。这几个前提决定了：需要先确认请求经过哪些节点，再选择能实际到达 Gitea 的路线。 413 表示请求体太大，不直接说明是哪一层拒绝HTTP 413 表示接收方认为请求体超过可接受范围。对 git push 来说，拒绝可能来自 Cloudflare、反向代理或 Git 服务入口。不能仅凭状态码就锁定 Nginx，也不能断定某一个文件一定超过某个数值。 先记录完整远程地址、push 退出状态和大致传输量，再检查代理与服务日志。Cloudflare 的 413 官方说明列出了与套餐及站点配置有关的上传限制。具体额度应查当前设置，不宜把某个免费套餐数字推广...</div></div></div></a><a class="pagination-related" href="/posts/20260810/935129197d02/" title="React 项目目录怎么分？先让文件有明确归属"><img class="cover" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/ffd32e34685eb5dcf370354c4fb73e4d-20261015131742284.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-11</div><div class="info-item-2">React 项目目录怎么分？先让文件有明确归属</div></div><div class="info-2"><div class="info-item-1">整理 React 项目时，我先列了一棵熟悉的目录树：components、pages、utils、store、assets。看起来很齐全，但真正写代码时，问题仍然会出现：页面里的 Header 算不算公共组件？一段业务计算是不是都该扔进 utils？新项目是不是要先建一整套空目录？ 后来我觉得，目录规范要解决的核心问题很朴素：拿到一个文件，能判断它该放在哪里；修改一个功能，能找到与它相关的内容。 下面是一套适合普通 React 单页应用的起点，是项目约定，不是 React 官方规定。 先从一棵够用的树开始123456789101112131415161718192021222324252627project/├── index.html├── package.json├── public/│   └── favicon.ico└── src/    ├── main.tsx    ├── App.tsx    ├── assets/    │   ├── images/    │   └── icons/    ├── components/    │   ├── Button/...</div></div></div></a><a class="pagination-related" href="/posts/20260813/982a238f3021/" title="抑制完美的冲动：当 AI 承担实现，工程师该如何守住工程底线？"><img class="cover" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/1c3db51e855a1bc1f2fbb765d38cdbf9-20261015132514297.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-14</div><div class="info-item-2">抑制完美的冲动：当 AI 承担实现，工程师该如何守住工程底线？</div></div><div class="info-2"><div class="info-item-1">抑制完美的冲动：当 AI 承担实现，工程师该如何守住工程底线？我把一段 AI 从 Figma 生成的 Tailwind 代码拿去问另一个 AI：为什么这些类名都要抽成变量，这算不算最佳实践？ 它先批评这种写法破坏了样式的局部可读性，建议把类名全部放回 JSX。我补充说项目只有我一个人，而且主要让 AI 来写，它又开始称赞样式变量可以节省上下文、统一风格。等我说“反正验收能过就行”，它几乎把这句话当成了所有工程问题的答案。 同一份代码，补充几句背景，评价就从反模式变成了先进实践。这让我意识到，AI 可以帮忙分析问题，但它的赞同本身不能成为决策依据。 我当时说，作为一个工程师，要抑制住完美的冲动。现在回头看，这句话还需要补上后半句：先弄清楚哪些只是写法偏好，哪些关系到交付是否可靠。 从样式变量这件小事说起把一串 Tailwind 类名放进变量，并不会天然导致构建失败。真正需要关注的是，构建工具能否在扫描范围内找到完整类名。动态拼接出一部分字符串，才可能让工具无法识别最终需要生成的样式。这个机制可以参考 Tailwind 的类名检测文档。 技术上可行，和组织上合适，是两个问题。 一个只...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251022%2Fce1d2f89ee9b73aff3af86f6ee5fee33.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Mtedium</div><div class="author-info-description">这是我的博客网站</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">28</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">47</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/mtedium"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/mtedium" rel="external nofollow noreferrer" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://www.zhihu.com/people/mtedium" rel="external nofollow noreferrer" target="_blank" title="Zhihu"><i class="fab fa-zhihu" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%B7%E7%82%B9%EF%BC%9A%E4%B8%80%E4%B8%AA%E4%B8%8D%E5%86%8D%E9%9C%80%E8%A6%81%E7%9A%84%E5%88%AB%E5%90%8D"><span class="toc-number">1.</span> <span class="toc-text">起点：一个不再需要的别名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9C%9F%E7%9B%B8%E8%97%8F%E5%9C%A8%E5%85%B1%E5%90%8C%E7%A5%96%E5%85%88%E9%87%8C"><span class="toc-number">2.</span> <span class="toc-text">真相藏在共同祖先里</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E4%B8%8D%E4%BC%9A%E6%88%90%E4%B8%BA%E6%B0%B8%E4%B9%85%E8%A7%84%E5%88%99"><span class="toc-number">3.</span> <span class="toc-text">删除不会成为永久规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%91%E4%BC%9A%E6%80%8E%E6%A0%B7%E9%87%8D%E6%96%B0%E6%8E%92%E6%9F%A5"><span class="toc-number">4.</span> <span class="toc-text">我会怎样重新排查</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B2%A1%E6%9C%89%E5%86%B2%E7%AA%81%EF%BC%8C%E4%B9%9F%E8%A6%81%E6%A3%80%E6%9F%A5%E6%9C%80%E7%BB%88%E8%A1%8C%E4%B8%BA"><span class="toc-number">5.</span> <span class="toc-text">没有冲突，也要检查最终行为</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%94%AF%E7%AD%96%E7%95%A5%E5%8F%AF%E4%BB%A5%E7%BC%A9%E5%B0%8F%E8%BF%99%E7%A7%8D%E9%97%AE%E9%A2%98%E7%9A%84%E5%8F%91%E7%94%9F%E8%8C%83%E5%9B%B4"><span class="toc-number">6.</span> <span class="toc-text">分支策略可以缩小这种问题的发生范围</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/20260907/f8ad58f2846f/" title="前端 CI-CD 选型之后，我更在意应用怎么管理"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/ee118b931a395d95a29d542b46628ee1-20261015133616372.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前端 CI-CD 选型之后，我更在意应用怎么管理"/></a><div class="content"><a class="title" href="/posts/20260907/f8ad58f2846f/" title="前端 CI-CD 选型之后，我更在意应用怎么管理">前端 CI-CD 选型之后，我更在意应用怎么管理</a><time datetime="2026-09-07T16:00:00.000Z" title="发表于 2026-09-08 00:00:00">2026-09-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/20260904/4a1ee5c34904/" title="基于 DocBook 做网页编辑器，到底该维护 XML、HTML 还是 JSON"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/5164899c25e3eddce72a5f67451aecd2-20261015133431183.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="基于 DocBook 做网页编辑器，到底该维护 XML、HTML 还是 JSON"/></a><div class="content"><a class="title" href="/posts/20260904/4a1ee5c34904/" title="基于 DocBook 做网页编辑器，到底该维护 XML、HTML 还是 JSON">基于 DocBook 做网页编辑器，到底该维护 XML、HTML 还是 JSON</a><time datetime="2026-09-04T16:00:00.000Z" title="发表于 2026-09-05 00:00:00">2026-09-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/20260819/1edd9e4fe2e5/" title="我想看的面经，是你当时怎么答的"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/dde3ac4804dc3549ec13523ebfbccae4-20261015133337167.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="我想看的面经，是你当时怎么答的"/></a><div class="content"><a class="title" href="/posts/20260819/1edd9e4fe2e5/" title="我想看的面经，是你当时怎么答的">我想看的面经，是你当时怎么答的</a><time datetime="2026-08-19T16:00:00.000Z" title="发表于 2026-08-20 00:00:00">2026-08-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/20260818/e2afbdbee33c/" title="Caddy 网站还在运行，为什么 reload 和 stop 都连接失败？"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/b5c5db6224c24bd8969878a3f3f66d62-20261015133242362.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Caddy 网站还在运行，为什么 reload 和 stop 都连接失败？"/></a><div class="content"><a class="title" href="/posts/20260818/e2afbdbee33c/" title="Caddy 网站还在运行，为什么 reload 和 stop 都连接失败？">Caddy 网站还在运行，为什么 reload 和 stop 都连接失败？</a><time datetime="2026-08-18T16:00:00.000Z" title="发表于 2026-08-19 00:00:00">2026-08-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/20260814/4eca7aa8ed6b/" title="Gitea Actions 构建成功，为什么宿主机没有更新？"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/b8a58f01e10b59e16624c8428647d9f0-20261015132916805.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Gitea Actions 构建成功，为什么宿主机没有更新？"/></a><div class="content"><a class="title" href="/posts/20260814/4eca7aa8ed6b/" title="Gitea Actions 构建成功，为什么宿主机没有更新？">Gitea Actions 构建成功，为什么宿主机没有更新？</a><time datetime="2026-08-14T16:00:00.000Z" title="发表于 2026-08-15 00:00:00">2026-08-15</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Mtedium</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo 8.0.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.1</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.1"></script><script src="/js/main.js?v=5.5.1"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

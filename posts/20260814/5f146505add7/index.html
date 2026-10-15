@@ -1,0 +1,224 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>服务器有代理，Gitea Runner 为什么还是连不上？ | Mtedium</title><meta name="author" content="Mtedium"><meta name="copyright" content="Mtedium"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="服务器上的代理已经能访问外网，Gitea Actions 却在准备 actions&#x2F;checkout@v4 时失败。给 Runner 加上代理之后，外网问题还没完全确认，Runner 访问自己的 Gitea 又变成了 502 Bad Gateway。 这两种错误看起来矛盾，实际暴露的是同一件事：代理运行在哪里、谁在发请求、这个请求该不该走代理，没有被分别说明。 这里的环境是 Linux 主机上运行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="服务器有代理，Gitea Runner 为什么还是连不上？">
+<meta property="og:url" content="http://mtedium.cn/posts/20260814/5f146505add7/index.html">
+<meta property="og:site_name" content="Mtedium">
+<meta property="og:description" content="服务器上的代理已经能访问外网，Gitea Actions 却在准备 actions&#x2F;checkout@v4 时失败。给 Runner 加上代理之后，外网问题还没完全确认，Runner 访问自己的 Gitea 又变成了 502 Bad Gateway。 这两种错误看起来矛盾，实际暴露的是同一件事：代理运行在哪里、谁在发请求、这个请求该不该走代理，没有被分别说明。 这里的环境是 Linux 主机上运行">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/7d18ce53aa688b09961ff6be1b06bef5-20261015133156117.png">
+<meta property="article:published_time" content="2026-08-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-15T05:48:25.931Z">
+<meta property="article:author" content="Mtedium">
+<meta property="article:tag" content="docker">
+<meta property="article:tag" content="gitea">
+<meta property="article:tag" content="代理">
+<meta property="article:tag" content="网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/7d18ce53aa688b09961ff6be1b06bef5-20261015133156117.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "服务器有代理，Gitea Runner 为什么还是连不上？",
+  "url": "http://mtedium.cn/posts/20260814/5f146505add7/",
+  "image": "https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/7d18ce53aa688b09961ff6be1b06bef5-20261015133156117.png",
+  "datePublished": "2026-08-14T16:00:00.000Z",
+  "dateModified": "2026-10-15T05:48:25.931Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Mtedium",
+      "url": "https://mtedium.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://mtedium.cn/posts/20260814/5f146505add7/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="msvalidate.01" content="059DF54900C08E19451C31287E2DF17F"/><link rel="stylesheet" href="/css/index.css?v=5.5.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '服务器有代理，Gitea Runner 为什么还是连不上？',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251022%2Fce1d2f89ee9b73aff3af86f6ee5fee33.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">28</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">47</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/7d18ce53aa688b09961ff6be1b06bef5-20261015133156117.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mtedium</span></a><a class="nav-page-title" href="/"><span class="site-name">服务器有代理，Gitea Runner 为什么还是连不上？</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">服务器有代理，Gitea Runner 为什么还是连不上？</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-08-14T16:00:00.000Z" title="发表于 2026-08-15 00:00:00">2026-08-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-15T05:48:25.931Z" title="更新于 2026-10-15 13:48:25">2026-10-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/">问题记录</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>服务器上的代理已经能访问外网，Gitea Actions 却在准备 <code>actions/checkout@v4</code> 时失败。给 Runner 加上代理之后，外网问题还没完全确认，Runner 访问自己的 Gitea 又变成了 <code>502 Bad Gateway</code>。</p>
+<p>这两种错误看起来矛盾，实际暴露的是同一件事：代理运行在哪里、谁在发请求、这个请求该不该走代理，没有被分别说明。</p>
+<p>这里的环境是 Linux 主机上运行代理核心，Gitea 与 Runner 通过 Docker Compose 部署；不是让服务器借用笔记本代理。虚拟局域网只是远程管理服务器的通道，不应该因为 CI 出错就跟着改它。</p>
+<h2 id="规则模式也需要流量先进入代理"><a href="#规则模式也需要流量先进入代理" class="headerlink" title="规则模式也需要流量先进入代理"></a>规则模式也需要流量先进入代理</h2><p>代理的“规则模式”解决的是：收到请求后，选择直连还是某个节点。它不表示服务器上的所有应用、所有容器都自动把请求交给代理。</p>
+<p>除非另行配置并验证了透明代理或 TUN 路由，否则 Shell、Runner 和 Docker daemon 都要有各自明确的代理入口。终端里的快捷命令可能只是导出环境变量，不会自动影响已启动的容器。</p>
+<p>服务器上没有桌面客户端也可以运行代理核心。脚本安装器、核心程序和管理面板是不同组件；核心负责转发，面板负责管理，<code>yq</code> 这类工具只负责处理配置。不能把某个 GitHub 项目名字直接当成 Homebrew formula，更不应凭 star 数量判断它能否适配当前环境。</p>
+<p>以 Mihomo 为例，配置中的 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://wiki.metacubex.one/config/inbound/port/">HTTP、SOCKS 和 mixed 监听端口</a>与<a target="_blank" rel="noopener external nofollow noreferrer" href="https://wiki.metacubex.one/config/general/#external-controller">外部控制接口</a>用途不同。管理面板能连接 <code>9090</code>，不等于 <code>9090</code> 就能用作 HTTP 代理。</p>
+<h2 id="第一层：先证明主机上的入口可用"><a href="#第一层：先证明主机上的入口可用" class="headerlink" title="第一层：先证明主机上的入口可用"></a>第一层：先证明主机上的入口可用</h2><p>假设实际 HTTP 代理入口是 <code>127.0.0.1:7890</code>，先显式测试：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 明确直连，不受当前 Shell 的代理环境变量影响</span></span><br><span class="line">curl --noproxy <span class="string">&#x27;*&#x27;</span> --connect-timeout 5 --max-time 20 -I https://github.com</span><br><span class="line"></span><br><span class="line"><span class="comment"># 明确走 HTTP 代理，同时避免已有 no_proxy 把请求排除</span></span><br><span class="line">curl --proxy http://127.0.0.1:7890 --noproxy <span class="string">&#x27;&#x27;</span> \</span><br><span class="line">  --connect-timeout 5 --max-time 20 -I https://github.com</span><br></pre></td></tr></table></figure>
+
+<p>直接运行 <code>curl -I</code> 不能保证是在直连，因为它可能读取已有代理环境变量。两条命令明确表达路径，才方便比较。</p>
+<p>若先出现 <code>200 Connection established</code>，它表示 HTTP CONNECT 隧道建立；还要看后续 TLS、目标站点响应与命令退出状态。一次请求成功，也只证明这个进程到这个目标的路径可用。<a target="_blank" rel="noopener external nofollow noreferrer" href="https://curl.se/docs/manpage.html#--proxy">curl 的代理选项文档</a>说明了显式代理和绕过规则。</p>
+<h2 id="第二层：容器里的-localhost-指向自己"><a href="#第二层：容器里的-localhost-指向自己" class="headerlink" title="第二层：容器里的 localhost 指向自己"></a>第二层：容器里的 localhost 指向自己</h2><p>Runner 容器里的 <code>127.0.0.1</code> 指向 Runner 容器，不能直接访问只监听在宿主机 loopback 上的代理。</p>
+<p>Linux Docker Engine 可以给容器增加宿主机入口别名，例如在原 Runner 服务里合并：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">runner:</span></span><br><span class="line">    <span class="attr">extra_hosts:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;host.docker.internal:host-gateway&quot;</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">http_proxy:</span> <span class="string">&quot;http://host.docker.internal:7890&quot;</span></span><br><span class="line">      <span class="attr">https_proxy:</span> <span class="string">&quot;http://host.docker.internal:7890&quot;</span></span><br><span class="line">      <span class="attr">no_proxy:</span> <span class="string">&quot;localhost,127.0.0.1,::1,server,gitea,git.example.com&quot;</span></span><br><span class="line">      <span class="attr">HTTP_PROXY:</span> <span class="string">&quot;http://host.docker.internal:7890&quot;</span></span><br><span class="line">      <span class="attr">HTTPS_PROXY:</span> <span class="string">&quot;http://host.docker.internal:7890&quot;</span></span><br><span class="line">      <span class="attr">NO_PROXY:</span> <span class="string">&quot;localhost,127.0.0.1,::1,server,gitea,git.example.com&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>这只是原服务的补充片段。<code>host-gateway</code> 需要 Docker Engine 支持，且代理必须监听到容器可访问的主机地址。若代理仍只监听 <code>127.0.0.1</code>，增加别名也不会让连接成功。允许容器访问时，应把监听和防火墙范围限制在需要的网络，别把代理和控制面板直接向公网开放。<a target="_blank" rel="noopener external nofollow noreferrer" href="https://docs.docker.com/compose/how-tos/networking/#custom-dns-with-extra_hosts">Docker Compose 网络文档</a>说明了这一映射方式。</p>
+<p>若使用 Docker 网桥地址，也应先查实际网络，而不是看到 <code>172.x</code> 就猜网关：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker inspect gitea-runner --format <span class="string">&#x27;&#123;&#123;json .NetworkSettings.Networks&#125;&#125;&#x27;</span></span><br><span class="line">docker network inspect &lt;上一步确认的网络名&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="为什么加代理以后访问-Gitea-会报-502"><a href="#为什么加代理以后访问-Gitea-会报-502" class="headerlink" title="为什么加代理以后访问 Gitea 会报 502"></a>为什么加代理以后访问 Gitea 会报 502</h2><p>Runner 需要访问内网的 <code>http://server:3000</code>。如果它也把这个请求交给 HTTP 代理，代理可能既不认识 Docker 服务名 <code>server</code>，也不在同一个网络，于是返回 502。</p>
+<p>这只是与现象相符的假设，仍需验证。可在具备 curl 的 Runner 环境中，对同一地址比较继承代理和强制直连的响应，再看代理日志与 Gitea 日志：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl --connect-timeout 5 --max-time 10 -I http://server:3000/</span><br><span class="line">curl --noproxy <span class="string">&#x27;*&#x27;</span> --connect-timeout 5 --max-time 10 -I http://server:3000/</span><br></pre></td></tr></table></figure>
+
+<p>直连成功、经代理失败，才支持把问题收敛到代理路径。<code>NO_PROXY</code> 中应列出实际请求使用的主机名，例如 <code>server</code>；只列 IP 段不能保证所有客户端都会先解析再匹配，CIDR 的支持也不完全一致。</p>
+<p><code>NO_PROXY</code> 的含义是“这些目标不经代理”，不是“禁止访问这些目标”。Gitea 本来就在同一个 Docker 网络时，保留 <code>server</code> 往往正是需要的配置。<a target="_blank" rel="noopener external nofollow noreferrer" href="https://docs.gitea.com/runner/proxy/">Runner 的代理说明</a>要求为需要直连的 Gitea 实例明确加入排除项。</p>
+<h2 id="第三层：daemon-拉镜像要单独配置"><a href="#第三层：daemon-拉镜像要单独配置" class="headerlink" title="第三层：daemon 拉镜像要单独配置"></a>第三层：daemon 拉镜像要单独配置</h2><p>日志里还有这条警告：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">the runner has a proxy but the docker daemon reports none,</span><br><span class="line">so image pulls will not use it</span><br></pre></td></tr></table></figure>
+
+<p>它说的是镜像拉取路径，不是当前 502 的直接证明。Runner 有代理而 daemon 没有时，获取 Action 代码和拉取 Job 镜像可以呈现不同结果。daemon 的配置方式见 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://docs.docker.com/engine/daemon/proxy/">Docker 官方代理文档</a>。</p>
+<p>Runner、任务容器与 daemon 在同一台服务器上，也仍是不同的进程环境。Runner 3.x 会把常用代理变量提供给 Job，但 Job 是否能解析代理地址、是否能到达那个监听入口，仍要单独确认；给 Runner 增加的 hosts 条目不自动变成 Job 的 hosts。</p>
+<h2 id="按下载阶段判断下一步"><a href="#按下载阶段判断下一步" class="headerlink" title="按下载阶段判断下一步"></a>按下载阶段判断下一步</h2><table>
+<thead>
+<tr>
+<th>失败位置</th>
+<th>实际关注的对象</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>docker pull</code> &#x2F; Job 镜像准备</td>
+<td>Docker daemon 到 registry</td>
+</tr>
+<tr>
+<td><code>Prepare all required actions</code></td>
+<td>Runner 获取 Action 仓库的链路</td>
+</tr>
+<tr>
+<td>Checkout 的 <code>git fetch</code></td>
+<td>Job 到业务仓库</td>
+</tr>
+<tr>
+<td><code>npm ci</code></td>
+<td>Job 到依赖 registry</td>
+</tr>
+</tbody></table>
+<p><code>actions/checkout@v4</code> 首先需要获取 Action 自己的实现，再由它拉业务仓库。Gitea 默认从 GitHub 获取省略主机名的 Action；自建 Gitea 不会自动带齐所有第三方 Action。<a target="_blank" rel="noopener external nofollow noreferrer" href="https://docs.gitea.com/usage/actions/faq/">官方 FAQ</a>解释了来源和绝对 URL 的用法。</p>
+<p>如果改为内网镜像仓库，应先实际同步对应 Action 和所需版本，再引用它。把 URL 换成一个不存在的仓库，只会把连接失败换成 404。</p>
+<h2 id="验证的是链路，不是“服务器装过代理”"><a href="#验证的是链路，不是“服务器装过代理”" class="headerlink" title="验证的是链路，不是“服务器装过代理”"></a>验证的是链路，不是“服务器装过代理”</h2><p>应用修改后执行 <code>docker compose config --quiet</code>、<code>docker compose up -d runner</code>，再看新一轮日志。不要因 502 就删除注册状态，也不要看到后续任务能跑，就以为镜像、仓库和依赖下载全都验证完成。</p>
+<p>对这类问题，我现在会先写下“谁访问谁、应不应该经代理、入口在哪里”。这三个问题明确以后，规则模式、容器网络和内网直连才不会搅在一起。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://mtedium.github.io">Mtedium</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://mtedium.cn/posts/20260814/5f146505add7/">http://mtedium.cn/posts/20260814/5f146505add7/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://mtedium.cn" target="_blank">Mtedium</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/gitea/">gitea</a><a class="post-meta__tags" href="/tags/docker/">docker</a><a class="post-meta__tags" href="/tags/%E7%BD%91%E7%BB%9C/">网络</a><a class="post-meta__tags" href="/tags/%E4%BB%A3%E7%90%86/">代理</a></div><div class="post-share"><div class="social-share" data-image="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/7d18ce53aa688b09961ff6be1b06bef5-20261015133156117.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/20260814/3589ea6a79b6/" title="Gitea Actions 怎么手动触发：从 workflow_dispatch 到没有按钮的排查"><img class="cover" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/d93b2168dd0085ad5b5a9d462ed02c93-20261015132756239.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Gitea Actions 怎么手动触发：从 workflow_dispatch 到没有按钮的排查</div></div><div class="info-2"><div class="info-item-1">推送触发的构建已经有了，我又想保留一个入口：需要部署时，自己去网页点一下，而不是为了启动任务再改一次 README。 给工作流加上 workflow_dispatch 后没有看到按钮，我一度怀疑 Gitea 根本不支持。实际上，要分清三件事：服务器支持什么事件、页面识别了哪份工作流、Runner 能否接到生成的任务。 Gitea 支持手动触发，但要核对服务端版本Gitea 在 1.23 发布说明中加入了 workflow_dispatch，支持通过 UI 携带参数手动运行。本文讨论的是素材中的 Gitea 1.26 场景；不能拿更早版本的经验直接判断，也不要把 Runner 的 3.x 版本当成 Gitea 服务端版本。 按钮由 Gitea 页面提供。Runner 负责执行任务；Runner 离线通常影响任务能否开始，不能直接证明手动触发能力不存在。 先放一份没有部署副作用的最小工作流在仓库中创建 .gitea/workflows/manual-check.yml： 12345678910111213141516name: Manual checkon:  workflow_di...</div></div></div></a><a class="pagination-related" href="/posts/20260814/86e18b8c2da3/" title="Runner 能找到 Gitea，为什么 checkout 却解析不了 server？"><img class="cover" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/3a9c01b1968a36afa0f3d8067aea8c89-20261015133102137.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Runner 能找到 Gitea，为什么 checkout 却解析不了 server？</div></div><div class="info-2"><div class="info-item-1">Runner 已经在线，日志也显示领取了任务，流水线却在 checkout 时报： 12fatal: unable to access &#x27;http://server:3000/team/project/&#x27;:Could not resolve host: server  最让人困惑的是：Gitea 和 Runner 明明在同一个 Compose 网络里，Runner 也一直用 http://server:3000 通信。为什么一执行任务，这个名字突然不存在了？ 关键是换了执行环境。 同一个服务器不代表同一个网络这次采用的是容器化 Runner，通过宿主机 Docker socket 创建 Job 容器。要区分三个对象：Gitea 容器、Runner 容器和临时 Job 容器。 Compose 把前两个服务接进同一个网络，并不会自动约束 Runner 之后通过 Docker API 创建的每个容器。Job 可能加入 Runner 新建的任务网络，那个网络里没有 server 这个服务名。    位置 能否解析 server 能证明什么    宿主机 Shell 取...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/20260814/86e18b8c2da3/" title="Runner 能找到 Gitea，为什么 checkout 却解析不了 server？"><img class="cover" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/3a9c01b1968a36afa0f3d8067aea8c89-20261015133102137.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-15</div><div class="info-item-2">Runner 能找到 Gitea，为什么 checkout 却解析不了 server？</div></div><div class="info-2"><div class="info-item-1">Runner 已经在线，日志也显示领取了任务，流水线却在 checkout 时报： 12fatal: unable to access &#x27;http://server:3000/team/project/&#x27;:Could not resolve host: server  最让人困惑的是：Gitea 和 Runner 明明在同一个 Compose 网络里，Runner 也一直用 http://server:3000 通信。为什么一执行任务，这个名字突然不存在了？ 关键是换了执行环境。 同一个服务器不代表同一个网络这次采用的是容器化 Runner，通过宿主机 Docker socket 创建 Job 容器。要区分三个对象：Gitea 容器、Runner 容器和临时 Job 容器。 Compose 把前两个服务接进同一个网络，并不会自动约束 Runner 之后通过 Docker API 创建的每个容器。Job 可能加入 Runner 新建的任务网络，那个网络里没有 server 这个服务名。    位置 能否解析 server 能证明什么    宿主机 Shell 取...</div></div></div></a><a class="pagination-related" href="/posts/20260812/7d580423208f/" title="Gitea 推送遇到 HTTP 413：先查请求链路，再分清 SSH 端口"><img class="cover" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/6c2f26207f5c76ce9239dedf4d1016ec-20261015131937471.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-13</div><div class="info-item-2">Gitea 推送遇到 HTTP 413：先查请求链路，再分清 SSH 端口</div></div><div class="info-2"><div class="info-item-1">向自己的 Gitea 推送代码时，日志出现了： 123error: RPC failed; HTTP 413 curl 22fatal: the remote end hung up unexpectedlyEverything up-to-date  最后一句很容易让人误以为已经推上去了。但前面明确发生了失败，不能只挑一句好看的输出判断结果。 我的访问路径里还有 Cloudflare，服务器没有公网 IP，但可以通过虚拟局域网连接。这几个前提决定了：需要先确认请求经过哪些节点，再选择能实际到达 Gitea 的路线。 413 表示请求体太大，不直接说明是哪一层拒绝HTTP 413 表示接收方认为请求体超过可接受范围。对 git push 来说，拒绝可能来自 Cloudflare、反向代理或 Git 服务入口。不能仅凭状态码就锁定 Nginx，也不能断定某一个文件一定超过某个数值。 先记录完整远程地址、push 退出状态和大致传输量，再检查代理与服务日志。Cloudflare 的 413 官方说明列出了与套餐及站点配置有关的上传限制。具体额度应查当前设置，不宜把某个免费套餐数字推广...</div></div></div></a><a class="pagination-related" href="/posts/20260812/e52a8d952f80/" title="用 Docker Compose 管理 Gitea Runner：先分清镜像、容器和任务"><img class="cover" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/a804d1c149687fcc95f1019bd68b2928-20261015132032969.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-13</div><div class="info-item-2">用 Docker Compose 管理 Gitea Runner：先分清镜像、容器和任务</div></div><div class="info-2"><div class="info-item-1">Gitea 装好了，仓库也能推送，接下来把工作流放进 .gitea/workflows/，是不是就能自动构建？ 我在配置时卡住的第一件事，是不知道 Runner 到底应该放在哪里：和 Gitea 放进同一个镜像，单独运行一个二进制，还是往原来的 Compose 文件再加一段？ 把这里理顺以后，很多看起来像“注册失败”的问题，实际上连 Runner 容器都还没创建。 Gitea、Runner 和 Job 分别负责什么Gitea 保存仓库、接收事件、安排任务；Runner 领取任务并汇报结果；Job 执行工作流中的步骤。使用 Docker 执行模式时，Runner 还会通过 Docker daemon 创建临时的 Job 容器。 所以，同一个 Compose 项目里可以有 Gitea 和 Runner 两个服务，但这不表示它们共用一个镜像，也不表示 Job 就在 Runner 自己的容器里执行。官方的 Runner 概述也区分了 Docker、DinD 和 host 等执行模式。 以下示例针对 Linux Docker Engine、Compose v2 和 gitea/runner...</div></div></div></a><a class="pagination-related" href="/posts/20260812/4e2eab07fdb4/" title="Docker 镜像总是拉不下来：从超时、仓库地址到离线搬运"><img class="cover" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/1be41519bed27482ffbaeb2008c83382-20261015131844893.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-13</div><div class="info-item-2">Docker 镜像总是拉不下来：从超时、仓库地址到离线搬运</div></div><div class="info-2"><div class="info-item-1">配置 Gitea Runner 时，我遇到过一种特别绕的状态：Compose 文件看着没问题，镜像却始终拉不下来。换了镜像站，错误从超时变成 403、429，再变成 pull access denied。后来把镜像从笔记本搬到服务器，容器又报 exec format error。 这些报错发生在不同阶段。把它们都理解成“Docker 源不好用”，就会不断更换配置，却不知道哪条假设已经被验证。 先分清到底在拉哪个镜像一条流水线可能涉及至少三类镜像：Runner 本身、执行 Job 的环境，以及项目 Dockerfile 的基础镜像。 例如，Runner 使用 gitea/runner:3，Job 使用 docker:27，项目的 Dockerfile 又写了 FROM node:22-alpine。第一个在 Compose 启动时获取，第二个在准备 Job 时获取，第三个在项目构建时获取。 Dockerfile 存在于本地，只说明构建配方在本地，不代表它引用的基础镜像也已经存在。宿主机 docker --version 显示什么版本，也不等于已经有同版本的 docker:&lt;t...</div></div></div></a><a class="pagination-related" href="/posts/20260814/4eca7aa8ed6b/" title="Gitea Actions 构建成功，为什么宿主机没有更新？"><img class="cover" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/b8a58f01e10b59e16624c8428647d9f0-20261015132916805.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-15</div><div class="info-item-2">Gitea Actions 构建成功，为什么宿主机没有更新？</div></div><div class="info-2"><div class="info-item-1">checkout 终于通过，构建也结束了。流水线里的部署步骤把 dist 复制到 /srv/www/frontend，页面却没有变化；后来又报 rsync: command not found，尝试在任务里执行 caddy reload 也没有作用。 这类问题不能再靠“流水线绿了”判断。最先要问的是：这些命令究竟在谁的文件系统、谁的进程环境里执行？ 本文针对容器化 Gitea Runner，并使用 Docker 执行模式的场景。示例路径均为说明用途，不代表在读者机器上已创建。 同样的绝对路径，可以属于三个不同的地方宿主机、Runner 容器、Job 容器，都可以拥有 /srv/www/frontend。路径字符串相同，不表示目录内容共享。 123宿主机 /srv/www/frontend       ← 站点可能从这里读取Runner 容器 /srv/www/frontend  ← Runner 自己的文件系统Job 容器 /srv/www/frontend     ← 本次步骤实际写入的位置  如果没有挂载或上传，Job 里的 mkdir、cp 只修改 Job 自己的目录；任务...</div></div></div></a><a class="pagination-related" href="/posts/20260814/3589ea6a79b6/" title="Gitea Actions 怎么手动触发：从 workflow_dispatch 到没有按钮的排查"><img class="cover" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/d93b2168dd0085ad5b5a9d462ed02c93-20261015132756239.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-15</div><div class="info-item-2">Gitea Actions 怎么手动触发：从 workflow_dispatch 到没有按钮的排查</div></div><div class="info-2"><div class="info-item-1">推送触发的构建已经有了，我又想保留一个入口：需要部署时，自己去网页点一下，而不是为了启动任务再改一次 README。 给工作流加上 workflow_dispatch 后没有看到按钮，我一度怀疑 Gitea 根本不支持。实际上，要分清三件事：服务器支持什么事件、页面识别了哪份工作流、Runner 能否接到生成的任务。 Gitea 支持手动触发，但要核对服务端版本Gitea 在 1.23 发布说明中加入了 workflow_dispatch，支持通过 UI 携带参数手动运行。本文讨论的是素材中的 Gitea 1.26 场景；不能拿更早版本的经验直接判断，也不要把 Runner 的 3.x 版本当成 Gitea 服务端版本。 按钮由 Gitea 页面提供。Runner 负责执行任务；Runner 离线通常影响任务能否开始，不能直接证明手动触发能力不存在。 先放一份没有部署副作用的最小工作流在仓库中创建 .gitea/workflows/manual-check.yml： 12345678910111213141516name: Manual checkon:  workflow_di...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251022%2Fce1d2f89ee9b73aff3af86f6ee5fee33.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Mtedium</div><div class="author-info-description">这是我的博客网站</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">28</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">47</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/mtedium"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/mtedium" rel="external nofollow noreferrer" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://www.zhihu.com/people/mtedium" rel="external nofollow noreferrer" target="_blank" title="Zhihu"><i class="fab fa-zhihu" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%84%E5%88%99%E6%A8%A1%E5%BC%8F%E4%B9%9F%E9%9C%80%E8%A6%81%E6%B5%81%E9%87%8F%E5%85%88%E8%BF%9B%E5%85%A5%E4%BB%A3%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">规则模式也需要流量先进入代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E5%B1%82%EF%BC%9A%E5%85%88%E8%AF%81%E6%98%8E%E4%B8%BB%E6%9C%BA%E4%B8%8A%E7%9A%84%E5%85%A5%E5%8F%A3%E5%8F%AF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">第一层：先证明主机上的入口可用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%B1%82%EF%BC%9A%E5%AE%B9%E5%99%A8%E9%87%8C%E7%9A%84-localhost-%E6%8C%87%E5%90%91%E8%87%AA%E5%B7%B1"><span class="toc-number">3.</span> <span class="toc-text">第二层：容器里的 localhost 指向自己</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8A%A0%E4%BB%A3%E7%90%86%E4%BB%A5%E5%90%8E%E8%AE%BF%E9%97%AE-Gitea-%E4%BC%9A%E6%8A%A5-502"><span class="toc-number">4.</span> <span class="toc-text">为什么加代理以后访问 Gitea 会报 502</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E5%B1%82%EF%BC%9Adaemon-%E6%8B%89%E9%95%9C%E5%83%8F%E8%A6%81%E5%8D%95%E7%8B%AC%E9%85%8D%E7%BD%AE"><span class="toc-number">5.</span> <span class="toc-text">第三层：daemon 拉镜像要单独配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%89%E4%B8%8B%E8%BD%BD%E9%98%B6%E6%AE%B5%E5%88%A4%E6%96%AD%E4%B8%8B%E4%B8%80%E6%AD%A5"><span class="toc-number">6.</span> <span class="toc-text">按下载阶段判断下一步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81%E7%9A%84%E6%98%AF%E9%93%BE%E8%B7%AF%EF%BC%8C%E4%B8%8D%E6%98%AF%E2%80%9C%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A3%85%E8%BF%87%E4%BB%A3%E7%90%86%E2%80%9D"><span class="toc-number">7.</span> <span class="toc-text">验证的是链路，不是“服务器装过代理”</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/20260907/f8ad58f2846f/" title="前端 CI-CD 选型之后，我更在意应用怎么管理"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/ee118b931a395d95a29d542b46628ee1-20261015133616372.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前端 CI-CD 选型之后，我更在意应用怎么管理"/></a><div class="content"><a class="title" href="/posts/20260907/f8ad58f2846f/" title="前端 CI-CD 选型之后，我更在意应用怎么管理">前端 CI-CD 选型之后，我更在意应用怎么管理</a><time datetime="2026-09-07T16:00:00.000Z" title="发表于 2026-09-08 00:00:00">2026-09-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/20260904/4a1ee5c34904/" title="基于 DocBook 做网页编辑器，到底该维护 XML、HTML 还是 JSON"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/5164899c25e3eddce72a5f67451aecd2-20261015133431183.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="基于 DocBook 做网页编辑器，到底该维护 XML、HTML 还是 JSON"/></a><div class="content"><a class="title" href="/posts/20260904/4a1ee5c34904/" title="基于 DocBook 做网页编辑器，到底该维护 XML、HTML 还是 JSON">基于 DocBook 做网页编辑器，到底该维护 XML、HTML 还是 JSON</a><time datetime="2026-09-04T16:00:00.000Z" title="发表于 2026-09-05 00:00:00">2026-09-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/20260819/1edd9e4fe2e5/" title="我想看的面经，是你当时怎么答的"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/dde3ac4804dc3549ec13523ebfbccae4-20261015133337167.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="我想看的面经，是你当时怎么答的"/></a><div class="content"><a class="title" href="/posts/20260819/1edd9e4fe2e5/" title="我想看的面经，是你当时怎么答的">我想看的面经，是你当时怎么答的</a><time datetime="2026-08-19T16:00:00.000Z" title="发表于 2026-08-20 00:00:00">2026-08-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/20260818/e2afbdbee33c/" title="Caddy 网站还在运行，为什么 reload 和 stop 都连接失败？"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/b5c5db6224c24bd8969878a3f3f66d62-20261015133242362.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Caddy 网站还在运行，为什么 reload 和 stop 都连接失败？"/></a><div class="content"><a class="title" href="/posts/20260818/e2afbdbee33c/" title="Caddy 网站还在运行，为什么 reload 和 stop 都连接失败？">Caddy 网站还在运行，为什么 reload 和 stop 都连接失败？</a><time datetime="2026-08-18T16:00:00.000Z" title="发表于 2026-08-19 00:00:00">2026-08-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/20260814/4eca7aa8ed6b/" title="Gitea Actions 构建成功，为什么宿主机没有更新？"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/b8a58f01e10b59e16624c8428647d9f0-20261015132916805.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Gitea Actions 构建成功，为什么宿主机没有更新？"/></a><div class="content"><a class="title" href="/posts/20260814/4eca7aa8ed6b/" title="Gitea Actions 构建成功，为什么宿主机没有更新？">Gitea Actions 构建成功，为什么宿主机没有更新？</a><time datetime="2026-08-14T16:00:00.000Z" title="发表于 2026-08-15 00:00:00">2026-08-15</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Mtedium</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo 8.0.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.1</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.1"></script><script src="/js/main.js?v=5.5.1"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

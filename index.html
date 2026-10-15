@@ -1,0 +1,292 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Mtedium - 探索兴趣至上</title><meta name="author" content="Mtedium"><meta name="copyright" content="Mtedium"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="这是我的博客网站">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mtedium">
+<meta property="og:url" content="http://mtedium.cn/index.html">
+<meta property="og:site_name" content="Mtedium">
+<meta property="og:description" content="这是我的博客网站">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251022%2Fce1d2f89ee9b73aff3af86f6ee5fee33.jpg">
+<meta property="article:author" content="Mtedium">
+<meta property="article:tag" content="Mtedium">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251022%2Fce1d2f89ee9b73aff3af86f6ee5fee33.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Mtedium",
+  "alternateName": [
+    "探索兴趣至上",
+    "mtedium.cn"
+  ],
+  "url": "http://mtedium.cn/"
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://mtedium.cn/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="msvalidate.01" content="059DF54900C08E19451C31287E2DF17F"/><link rel="stylesheet" href="/css/index.css?v=5.5.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Mtedium',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'home'
+}</script><meta name="generator" content="Hexo 8.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251022%2Fce1d2f89ee9b73aff3af86f6ee5fee33.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">28</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">47</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251022%2F16f4c46474da67797a5e5e43be04b5cd.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Mtedium</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="site-info"><h1 id="site-title">Mtedium</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/mtedium" rel="external nofollow noreferrer" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://www.zhihu.com/people/mtedium" rel="external nofollow noreferrer" target="_blank" title="Zhihu"><i class="fab fa-zhihu" style="color: #24292e;"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="post_cover"><a href="/posts/20260907/f8ad58f2846f/" title="前端 CI-CD 选型之后，我更在意应用怎么管理"><img class="post-bg" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/ee118b931a395d95a29d542b46628ee1-20261015133616372.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前端 CI-CD 选型之后，我更在意应用怎么管理"></a></div><div class="recent-post-info"><a class="article-title" href="/posts/20260907/f8ad58f2846f/" title="前端 CI-CD 选型之后，我更在意应用怎么管理">前端 CI-CD 选型之后，我更在意应用怎么管理</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-09-07T16:00:00.000Z" title="发表于 2026-09-08 00:00:00">2026-09-08</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/">问题记录</a></span></div><div class="content">实习快结束了，我准备再投一些岗位，也想把自己的项目补得完整一点，练习单元测试和 CI&#x2F;CD。 最开始的问题是：“现在前端一般用什么 CI&#x2F;CD 工具？”但我并非从零开始。我已经在自己的服务器上搭过 Gitea，也实践过 Docker Compose 管理 Runner。实习所在的团队，则使用阿里云云效。 聊到后面，我发现自己最不舒服的地方，不是流水线写不出来，而是应用的配置、状态和管理入口太分散。一个 CI&#x2F;CD 选型问题，最后变成了一个应用管理问题。 先分清代码托管、流水线和 Runner这些东西经常一起出现，但它们解决的问题不同。 代码托管负责仓库、权限和协作。流水线负责定义触发条件、任务和依赖。Runner 才是执行任务的环境：拉代码、装依赖、跑测试、构建产物，必要时再执行部署。 GitHub Actions 的官方说明也按工作流、事件、任务、步骤和 Runner 拆解这些概念。Understanding GitHub Actions 因此，前端没有一种必须使用的 CI&#x2F;CD 工具。比较实际的起点，是看仓库在哪里，以及自己愿意维护多少...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/posts/20260904/4a1ee5c34904/" title="基于 DocBook 做网页编辑器，到底该维护 XML、HTML 还是 JSON"><img class="post-bg" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/5164899c25e3eddce72a5f67451aecd2-20261015133431183.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="基于 DocBook 做网页编辑器，到底该维护 XML、HTML 还是 JSON"></a></div><div class="recent-post-info"><a class="article-title" href="/posts/20260904/4a1ee5c34904/" title="基于 DocBook 做网页编辑器，到底该维护 XML、HTML 还是 JSON">基于 DocBook 做网页编辑器，到底该维护 XML、HTML 还是 JSON</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-09-04T16:00:00.000Z" title="发表于 2026-09-05 00:00:00">2026-09-05</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/">问题记录</a></span></div><div class="content">我们做过一个基于 DocBook 的网页文档项目，可以把目标理解成“网页版 Word”。团队后端使用 Python，客户又明确要求不能脱离 DocBook。 但实际项目已经走向以 HTML 为中心，XML 导出也没有做出来。这次我想复盘的，是当初那个很基础、却越讨论越乱的问题：内容存成 XML，前端要实时编辑，到底应该编辑什么？ 讨论中出现了 XML、JSON、HTML、XSLT、CSS、Tiptap，以及“Python 要不要调用 Node”。如果每出现一个问题，就换一种说法宣布“这个才是中心”，架构只会越来越难理解。 我后来觉得，需要先把三个问题分开：文档允许表达什么，编辑器靠什么维护状态，最终发布成什么。 DocBook 给的是文档契约DocBook 是结构化文档的词汇和约束。章节、段落、列表、交叉引用等元素各有语义，也有合法的组合关系。它可以用来撰写、交换和发布文档，不只是一个让排版“整齐”的模板。 例如，下面是一份很小的 DocBook 5 文档： 1234&lt;article xmlns=&quot;http://docbook.org/ns/docbook&quo...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/posts/20260819/1edd9e4fe2e5/" title="我想看的面经，是你当时怎么答的"><img class="post-bg" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/dde3ac4804dc3549ec13523ebfbccae4-20261015133337167.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="我想看的面经，是你当时怎么答的"></a></div><div class="recent-post-info"><a class="article-title" href="/posts/20260819/1edd9e4fe2e5/" title="我想看的面经，是你当时怎么答的">我想看的面经，是你当时怎么答的</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-08-19T16:00:00.000Z" title="发表于 2026-08-20 00:00:00">2026-08-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></span></div><div class="content">今天刷面经时，我又遇到一种让我很烦的文章：列出面试官问了什么，然后紧接着给一份整理好的答案。 看着内容很多，知识点也齐全，但我最想知道的事始终没出现：你当时到底怎么回答的，回答到了哪一步，又是怎么被追问的？ 如果只想看一个问题该怎么答，我可以去看教程、查资料、刷题。我看面经，是想知道一次面试实际发生了什么。 我看面经，有两个目的第一个目的很直接：了解别人被问了什么。 同一个方向的岗位，最近会聊哪些知识点，项目会被挖到什么程度，哪些问题经常作为追问出现。这些信息可以帮助我检查自己的准备范围。 当然，一篇面经只能代表那一次面试。它可以提供线索，不能直接推导出某家公司一定考什么，或者哪个问题出现的概率有多高。 第二个目的更难被题库替代：看别人怎么应对现场。 面试是一场连续的对话。同一道题，从哪里开始讲，会不会先确认条件，卡住之后怎么继续，面试官为什么突然换了一个方向，这些细节都影响后面的对话。 我想知道的是：  你听到问题时，第一反应是什么？ 你当时理解的重点，和后来复盘的重点一致吗？ 你实际说了哪些内容，漏掉了哪些条件？ 面试官在哪句话之后追问，你又怎么补充？ 哪些地方你知道自己答错...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/posts/20260818/e2afbdbee33c/" title="Caddy 网站还在运行，为什么 reload 和 stop 都连接失败？"><img class="post-bg" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/b5c5db6224c24bd8969878a3f3f66d62-20261015133242362.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Caddy 网站还在运行，为什么 reload 和 stop 都连接失败？"></a></div><div class="recent-post-info"><a class="article-title" href="/posts/20260818/e2afbdbee33c/" title="Caddy 网站还在运行，为什么 reload 和 stop 都连接失败？">Caddy 网站还在运行，为什么 reload 和 stop 都连接失败？</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-08-18T16:00:00.000Z" title="发表于 2026-08-19 00:00:00">2026-08-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/">问题记录</a></span></div><div class="content">修改 Caddyfile 后执行 caddy reload，命令已经找到文件，也完成了配置转换，却在最后失败： 1234using adjacent Caddyfileadapted config to JSONPost &quot;http://localhost:2019/load&quot;:dial tcp 127.0.0.1:2019: connect: connection refused  接着执行 caddy stop，又遇到同一个 2019 端口连接失败。但查看监听状态，网站端口仍由 Caddy 提供服务，甚至已经出现多个 Caddy 进程。 所以，第一条报错不能直接翻译成“Caddy 没运行”。这次真正的线索，藏在全局配置里： 1234&#123;    admin off    auto_https off&#125;  网站监听端口和管理接口是两条通道Caddy 处理网页请求的监听地址，与接收配置修改的管理接口不是一回事。 默认管理接口在 localhost:2019。caddy reload 把新配置提交到管理 API，caddy stop 也通过管理 ...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/posts/20260814/4eca7aa8ed6b/" title="Gitea Actions 构建成功，为什么宿主机没有更新？"><img class="post-bg" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/b8a58f01e10b59e16624c8428647d9f0-20261015132916805.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Gitea Actions 构建成功，为什么宿主机没有更新？"></a></div><div class="recent-post-info"><a class="article-title" href="/posts/20260814/4eca7aa8ed6b/" title="Gitea Actions 构建成功，为什么宿主机没有更新？">Gitea Actions 构建成功，为什么宿主机没有更新？</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-08-14T16:00:00.000Z" title="发表于 2026-08-15 00:00:00">2026-08-15</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/">问题记录</a></span></div><div class="content">checkout 终于通过，构建也结束了。流水线里的部署步骤把 dist 复制到 /srv/www/frontend，页面却没有变化；后来又报 rsync: command not found，尝试在任务里执行 caddy reload 也没有作用。 这类问题不能再靠“流水线绿了”判断。最先要问的是：这些命令究竟在谁的文件系统、谁的进程环境里执行？ 本文针对容器化 Gitea Runner，并使用 Docker 执行模式的场景。示例路径均为说明用途，不代表在读者机器上已创建。 同样的绝对路径，可以属于三个不同的地方宿主机、Runner 容器、Job 容器，都可以拥有 /srv/www/frontend。路径字符串相同，不表示目录内容共享。 123宿主机 /srv/www/frontend       ← 站点可能从这里读取Runner 容器 /srv/www/frontend  ← Runner 自己的文件系统Job 容器 /srv/www/frontend     ← 本次步骤实际写入的位置  如果没有挂载或上传，Job 里的 mkdir、cp 只修改 Job 自己的目录；任务...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/posts/20260814/86e18b8c2da3/" title="Runner 能找到 Gitea，为什么 checkout 却解析不了 server？"><img class="post-bg" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/3a9c01b1968a36afa0f3d8067aea8c89-20261015133102137.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Runner 能找到 Gitea，为什么 checkout 却解析不了 server？"></a></div><div class="recent-post-info"><a class="article-title" href="/posts/20260814/86e18b8c2da3/" title="Runner 能找到 Gitea，为什么 checkout 却解析不了 server？">Runner 能找到 Gitea，为什么 checkout 却解析不了 server？</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-08-14T16:00:00.000Z" title="发表于 2026-08-15 00:00:00">2026-08-15</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/">问题记录</a></span></div><div class="content">Runner 已经在线，日志也显示领取了任务，流水线却在 checkout 时报： 12fatal: unable to access &#x27;http://server:3000/team/project/&#x27;:Could not resolve host: server  最让人困惑的是：Gitea 和 Runner 明明在同一个 Compose 网络里，Runner 也一直用 http://server:3000 通信。为什么一执行任务，这个名字突然不存在了？ 关键是换了执行环境。 同一个服务器不代表同一个网络这次采用的是容器化 Runner，通过宿主机 Docker socket 创建 Job 容器。要区分三个对象：Gitea 容器、Runner 容器和临时 Job 容器。 Compose 把前两个服务接进同一个网络，并不会自动约束 Runner 之后通过 Docker API 创建的每个容器。Job 可能加入 Runner 新建的任务网络，那个网络里没有 server 这个服务名。    位置 能否解析 server 能证明什么    宿主机 Shell 取...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/posts/20260814/5f146505add7/" title="服务器有代理，Gitea Runner 为什么还是连不上？"><img class="post-bg" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/7d18ce53aa688b09961ff6be1b06bef5-20261015133156117.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="服务器有代理，Gitea Runner 为什么还是连不上？"></a></div><div class="recent-post-info"><a class="article-title" href="/posts/20260814/5f146505add7/" title="服务器有代理，Gitea Runner 为什么还是连不上？">服务器有代理，Gitea Runner 为什么还是连不上？</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-08-14T16:00:00.000Z" title="发表于 2026-08-15 00:00:00">2026-08-15</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/">问题记录</a></span></div><div class="content">服务器上的代理已经能访问外网，Gitea Actions 却在准备 actions/checkout@v4 时失败。给 Runner 加上代理之后，外网问题还没完全确认，Runner 访问自己的 Gitea 又变成了 502 Bad Gateway。 这两种错误看起来矛盾，实际暴露的是同一件事：代理运行在哪里、谁在发请求、这个请求该不该走代理，没有被分别说明。 这里的环境是 Linux 主机上运行代理核心，Gitea 与 Runner 通过 Docker Compose 部署；不是让服务器借用笔记本代理。虚拟局域网只是远程管理服务器的通道，不应该因为 CI 出错就跟着改它。 规则模式也需要流量先进入代理代理的“规则模式”解决的是：收到请求后，选择直连还是某个节点。它不表示服务器上的所有应用、所有容器都自动把请求交给代理。 除非另行配置并验证了透明代理或 TUN 路由，否则 Shell、Runner 和 Docker daemon 都要有各自明确的代理入口。终端里的快捷命令可能只是导出环境变量，不会自动影响已启动的容器。 服务器上没有桌面客户端也可以运行代理核心。脚本安装器、核心程...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/posts/20260814/3589ea6a79b6/" title="Gitea Actions 怎么手动触发：从 workflow_dispatch 到没有按钮的排查"><img class="post-bg" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/d93b2168dd0085ad5b5a9d462ed02c93-20261015132756239.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Gitea Actions 怎么手动触发：从 workflow_dispatch 到没有按钮的排查"></a></div><div class="recent-post-info"><a class="article-title" href="/posts/20260814/3589ea6a79b6/" title="Gitea Actions 怎么手动触发：从 workflow_dispatch 到没有按钮的排查">Gitea Actions 怎么手动触发：从 workflow_dispatch 到没有按钮的排查</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-08-14T16:00:00.000Z" title="发表于 2026-08-15 00:00:00">2026-08-15</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/">问题记录</a></span></div><div class="content">推送触发的构建已经有了，我又想保留一个入口：需要部署时，自己去网页点一下，而不是为了启动任务再改一次 README。 给工作流加上 workflow_dispatch 后没有看到按钮，我一度怀疑 Gitea 根本不支持。实际上，要分清三件事：服务器支持什么事件、页面识别了哪份工作流、Runner 能否接到生成的任务。 Gitea 支持手动触发，但要核对服务端版本Gitea 在 1.23 发布说明中加入了 workflow_dispatch，支持通过 UI 携带参数手动运行。本文讨论的是素材中的 Gitea 1.26 场景；不能拿更早版本的经验直接判断，也不要把 Runner 的 3.x 版本当成 Gitea 服务端版本。 按钮由 Gitea 页面提供。Runner 负责执行任务；Runner 离线通常影响任务能否开始，不能直接证明手动触发能力不存在。 先放一份没有部署副作用的最小工作流在仓库中创建 .gitea/workflows/manual-check.yml： 12345678910111213141516name: Manual checkon:  workflow_di...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/posts/20260813/982a238f3021/" title="抑制完美的冲动：当 AI 承担实现，工程师该如何守住工程底线？"><img class="post-bg" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/1c3db51e855a1bc1f2fbb765d38cdbf9-20261015132514297.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="抑制完美的冲动：当 AI 承担实现，工程师该如何守住工程底线？"></a></div><div class="recent-post-info"><a class="article-title" href="/posts/20260813/982a238f3021/" title="抑制完美的冲动：当 AI 承担实现，工程师该如何守住工程底线？">抑制完美的冲动：当 AI 承担实现，工程师该如何守住工程底线？</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-08-13T16:00:00.000Z" title="发表于 2026-08-14 00:00:00">2026-08-14</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%9D%E8%80%83/">技术思考</a></span></div><div class="content">抑制完美的冲动：当 AI 承担实现，工程师该如何守住工程底线？我把一段 AI 从 Figma 生成的 Tailwind 代码拿去问另一个 AI：为什么这些类名都要抽成变量，这算不算最佳实践？ 它先批评这种写法破坏了样式的局部可读性，建议把类名全部放回 JSX。我补充说项目只有我一个人，而且主要让 AI 来写，它又开始称赞样式变量可以节省上下文、统一风格。等我说“反正验收能过就行”，它几乎把这句话当成了所有工程问题的答案。 同一份代码，补充几句背景，评价就从反模式变成了先进实践。这让我意识到，AI 可以帮忙分析问题，但它的赞同本身不能成为决策依据。 我当时说，作为一个工程师，要抑制住完美的冲动。现在回头看，这句话还需要补上后半句：先弄清楚哪些只是写法偏好，哪些关系到交付是否可靠。 从样式变量这件小事说起把一串 Tailwind 类名放进变量，并不会天然导致构建失败。真正需要关注的是，构建工具能否在扫描范围内找到完整类名。动态拼接出一部分字符串，才可能让工具无法识别最终需要生成的样式。这个机制可以参考 Tailwind 的类名检测文档。 技术上可行，和组织上合适，是两个问题。 一个只...</div></div></div><div class="recent-post-item"><div class="post_cover"><a href="/posts/20260812/7d580423208f/" title="Gitea 推送遇到 HTTP 413：先查请求链路，再分清 SSH 端口"><img class="post-bg" src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/6c2f26207f5c76ce9239dedf4d1016ec-20261015131937471.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Gitea 推送遇到 HTTP 413：先查请求链路，再分清 SSH 端口"></a></div><div class="recent-post-info"><a class="article-title" href="/posts/20260812/7d580423208f/" title="Gitea 推送遇到 HTTP 413：先查请求链路，再分清 SSH 端口">Gitea 推送遇到 HTTP 413：先查请求链路，再分清 SSH 端口</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-08-12T16:00:00.000Z" title="发表于 2026-08-13 00:00:00">2026-08-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/">问题记录</a></span></div><div class="content">向自己的 Gitea 推送代码时，日志出现了： 123error: RPC failed; HTTP 413 curl 22fatal: the remote end hung up unexpectedlyEverything up-to-date  最后一句很容易让人误以为已经推上去了。但前面明确发生了失败，不能只挑一句好看的输出判断结果。 我的访问路径里还有 Cloudflare，服务器没有公网 IP，但可以通过虚拟局域网连接。这几个前提决定了：需要先确认请求经过哪些节点，再选择能实际到达 Gitea 的路线。 413 表示请求体太大，不直接说明是哪一层拒绝HTTP 413 表示接收方认为请求体超过可接受范围。对 git push 来说，拒绝可能来自 Cloudflare、反向代理或 Git 服务入口。不能仅凭状态码就锁定 Nginx，也不能断定某一个文件一定超过某个数值。 先记录完整远程地址、push 退出状态和大致传输量，再检查代理与服务日志。Cloudflare 的 413 官方说明列出了与套餐及站点配置有关的上传限制。具体额度应查当前设置，不宜把某个免费套餐数字推广...</div></div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/page/2/#content-inner">2</a><a class="page-number" href="/page/3/#content-inner">3</a><a class="extend next" rel="next" href="/page/2/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20251022%2Fce1d2f89ee9b73aff3af86f6ee5fee33.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Mtedium</div><div class="author-info-description">这是我的博客网站</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">28</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">47</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/mtedium"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/mtedium" rel="external nofollow noreferrer" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://www.zhihu.com/people/mtedium" rel="external nofollow noreferrer" target="_blank" title="Zhihu"><i class="fab fa-zhihu" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/20260907/f8ad58f2846f/" title="前端 CI-CD 选型之后，我更在意应用怎么管理"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/ee118b931a395d95a29d542b46628ee1-20261015133616372.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="前端 CI-CD 选型之后，我更在意应用怎么管理"/></a><div class="content"><a class="title" href="/posts/20260907/f8ad58f2846f/" title="前端 CI-CD 选型之后，我更在意应用怎么管理">前端 CI-CD 选型之后，我更在意应用怎么管理</a><time datetime="2026-09-07T16:00:00.000Z" title="发表于 2026-09-08 00:00:00">2026-09-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/20260904/4a1ee5c34904/" title="基于 DocBook 做网页编辑器，到底该维护 XML、HTML 还是 JSON"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/5164899c25e3eddce72a5f67451aecd2-20261015133431183.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="基于 DocBook 做网页编辑器，到底该维护 XML、HTML 还是 JSON"/></a><div class="content"><a class="title" href="/posts/20260904/4a1ee5c34904/" title="基于 DocBook 做网页编辑器，到底该维护 XML、HTML 还是 JSON">基于 DocBook 做网页编辑器，到底该维护 XML、HTML 还是 JSON</a><time datetime="2026-09-04T16:00:00.000Z" title="发表于 2026-09-05 00:00:00">2026-09-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/20260819/1edd9e4fe2e5/" title="我想看的面经，是你当时怎么答的"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/dde3ac4804dc3549ec13523ebfbccae4-20261015133337167.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="我想看的面经，是你当时怎么答的"/></a><div class="content"><a class="title" href="/posts/20260819/1edd9e4fe2e5/" title="我想看的面经，是你当时怎么答的">我想看的面经，是你当时怎么答的</a><time datetime="2026-08-19T16:00:00.000Z" title="发表于 2026-08-20 00:00:00">2026-08-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/20260818/e2afbdbee33c/" title="Caddy 网站还在运行，为什么 reload 和 stop 都连接失败？"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/b5c5db6224c24bd8969878a3f3f66d62-20261015133242362.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Caddy 网站还在运行，为什么 reload 和 stop 都连接失败？"/></a><div class="content"><a class="title" href="/posts/20260818/e2afbdbee33c/" title="Caddy 网站还在运行，为什么 reload 和 stop 都连接失败？">Caddy 网站还在运行，为什么 reload 和 stop 都连接失败？</a><time datetime="2026-08-18T16:00:00.000Z" title="发表于 2026-08-19 00:00:00">2026-08-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/20260814/4eca7aa8ed6b/" title="Gitea Actions 构建成功，为什么宿主机没有更新？"><img src="https://picgo-mtedium.oss-cn-shanghai.aliyuncs.com/20261015/b8a58f01e10b59e16624c8428647d9f0-20261015132916805.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Gitea Actions 构建成功，为什么宿主机没有更新？"/></a><div class="content"><a class="title" href="/posts/20260814/4eca7aa8ed6b/" title="Gitea Actions 构建成功，为什么宿主机没有更新？">Gitea Actions 构建成功，为什么宿主机没有更新？</a><time datetime="2026-08-14T16:00:00.000Z" title="发表于 2026-08-15 00:00:00">2026-08-15</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/object-Object/"><span class="card-category-list-name">[object Object]</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%89%8D%E7%AB%AF/"><span class="card-category-list-name">前端</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"><span class="card-category-list-name">博客搭建</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%8A%80%E6%9C%AF%E5%A4%96%E7%9A%84%E6%80%9D%E8%80%83/"><span class="card-category-list-name">技术外的思考</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%9D%E8%80%83/"><span class="card-category-list-name">技术思考</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/"><span class="card-category-list-name">问题记录</span><span class="card-category-list-count">17</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/"><span class="card-category-list-name">随笔</span><span class="card-category-list-count">1</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Tiptap/" style="font-size: 1.1em; color: #999">Tiptap</a> <a href="/tags/Hexo/" style="font-size: 1.1em; color: #999">Hexo</a> <a href="/tags/Pychanm/" style="font-size: 1.1em; color: #999">Pychanm</a> <a href="/tags/cloudflare/" style="font-size: 1.1em; color: #999">cloudflare</a> <a href="/tags/JavaScript/" style="font-size: 1.18em; color: #999ca1">JavaScript</a> <a href="/tags/%E4%BA%92%E8%81%94%E7%BD%91%E5%8E%86%E5%8F%B2/" style="font-size: 1.1em; color: #999">互联网历史</a> <a href="/tags/Butterfly/" style="font-size: 1.1em; color: #999">Butterfly</a> <a href="/tags/yaml/" style="font-size: 1.1em; color: #999">yaml</a> <a href="/tags/gitea/" style="font-size: 1.5em; color: #99a9bf">gitea</a> <a href="/tags/css/" style="font-size: 1.1em; color: #999">css</a> <a href="/tags/%E5%A9%9A%E5%A7%BB/" style="font-size: 1.1em; color: #999">婚姻</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 1.1em; color: #999">计算机网络</a> <a href="/tags/react/" style="font-size: 1.18em; color: #999ca1">react</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 1.34em; color: #99a3b0">工程化</a> <a href="/tags/uv/" style="font-size: 1.1em; color: #999">uv</a> <a href="/tags/axios/" style="font-size: 1.1em; color: #999">axios</a> <a href="/tags/CSS/" style="font-size: 1.1em; color: #999">CSS</a> <a href="/tags/%E5%AD%A6%E4%B9%A0/" style="font-size: 1.1em; color: #999">学习</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 1.18em; color: #999ca1">网络</a> <a href="/tags/svg/" style="font-size: 1.1em; color: #999">svg</a> <a href="/tags/Python/" style="font-size: 1.1em; color: #999">Python</a> <a href="/tags/%E5%A4%8D%E7%9B%98/" style="font-size: 1.1em; color: #999">复盘</a> <a href="/tags/AI/" style="font-size: 1.1em; color: #999">AI</a> <a href="/tags/ts/" style="font-size: 1.26em; color: #999fa8">ts</a> <a href="/tags/DocBook/" style="font-size: 1.1em; color: #999">DocBook</a> <a href="/tags/linux/" style="font-size: 1.1em; color: #999">linux</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 1.1em; color: #999">测试</a> <a href="/tags/React/" style="font-size: 1.1em; color: #999">React</a> <a href="/tags/caddy/" style="font-size: 1.18em; color: #999ca1">caddy</a> <a href="/tags/XML/" style="font-size: 1.1em; color: #999">XML</a> <a href="/tags/Linux/" style="font-size: 1.18em; color: #999ca1">Linux</a> <a href="/tags/git/" style="font-size: 1.26em; color: #999fa8">git</a> <a href="/tags/js/" style="font-size: 1.1em; color: #999">js</a> <a href="/tags/Tailwind-CSS/" style="font-size: 1.1em; color: #999">Tailwind CSS</a> <a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 1.1em; color: #999">部署</a> <a href="/tags/OOP/" style="font-size: 1.1em; color: #999">OOP</a> <a href="/tags/WSL/" style="font-size: 1.1em; color: #999">WSL</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 1.42em; color: #99a6b7">前端</a> <a href="/tags/Docker/" style="font-size: 1.1em; color: #999">Docker</a> <a href="/tags/Gitea/" style="font-size: 1.1em; color: #999">Gitea</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/"
+            title="查看更多">
+            <i class="fas fa-angle-right"></i>
+          </a>
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/09/">
+            <span class="card-archive-list-date">
+              九月 2026
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/08/">
+            <span class="card-archive-list-date">
+              八月 2026
+            </span>
+            <span class="card-archive-list-count">11</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/07/">
+            <span class="card-archive-list-date">
+              七月 2026
+            </span>
+            <span class="card-archive-list-count">5</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/06/">
+            <span class="card-archive-list-date">
+              六月 2026
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/05/">
+            <span class="card-archive-list-date">
+              五月 2026
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/04/">
+            <span class="card-archive-list-date">
+              四月 2026
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/03/">
+            <span class="card-archive-list-date">
+              三月 2026
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/12/">
+            <span class="card-archive-list-date">
+              十二月 2025
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">28</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-10-15T05:48:52.185Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Mtedium</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo 8.0.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.1</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.1"></script><script src="/js/main.js?v=5.5.1"></script><div class="js-pjax"><script>window.typedJSFn = {
+  init: str => {
+    window.typed = new Typed('#subtitle', Object.assign({
+      strings: str,
+      startDelay: 300,
+      typeSpeed: 150,
+      loop: true,
+      backSpeed: 50,
+    }, null))
+  },
+  run: subtitleType => {
+    if (true) {
+      if (typeof Typed === 'function') {
+        subtitleType()
+      } else {
+        btf.getScript('https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.min.js').then(subtitleType)
+      }
+    } else {
+      subtitleType()
+    }
+  },
+  processSubtitle: (content, extraContents = []) => {
+    if (true) {
+      const sub = ["命运赠送的礼物，早已在暗中标好了价格","Stay Hungry, Stay Foolish"].slice()
+
+      if (extraContents.length > 0) {
+        sub.unshift(...extraContents)
+      }
+
+      if (typeof content === 'string') {
+        sub.unshift(content)
+      } else if (Array.isArray(content)) {
+        sub.unshift(...content)
+      }
+
+      sub.length > 0 && typedJSFn.init(sub)
+    } else {
+      document.getElementById('subtitle').textContent = typeof content === 'string' ? content :
+        (Array.isArray(content) && content.length > 0 ? content[0] : '')
+    }
+  }
+}
+btf.addGlobalFn('pjaxSendOnce', () => { typed.destroy() }, 'typedDestroy')
+</script><script>function subtitleType () {
+  typedJSFn.processSubtitle(["命运赠送的礼物，早已在暗中标好了价格","Stay Hungry, Stay Foolish"])
+}
+typedJSFn.run(subtitleType)</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
